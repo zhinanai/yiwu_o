@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="__WCSS__/base.css">
+    <link rel="stylesheet" type="text/less" href="__WCSS__/comment/answer.less">
+    <script type="text/javascript" src="__WJS__/reset.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/less.js/3.0.4/less.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/editor.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/vue-resource.js"></script>
+    <script src="__WJS__/layer.js?11"></script>
+    <title>提问</title>
+    <style>
+    @font-face {
+        font-family: 'iconfont';  /* project id 803693 */
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot');
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.woff') format('woff'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.svg#iconfont') format('svg');
+    }
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap" id="app">
+        <div class="header">
+            <i class="iconfont icon" @click="handelBack">&#xe602;</i>
+            <p class="title">
+                <span  v-for="item in questiondetail">
+                {{item.title}}
+                </span>
+            </p>
+            <i class="iconfont next" @click="handelSend">&#xe666;</i>
+        </div>
+        <div class="main" :style="{ height: scrollHeight +'px'}">
+                <!-- 文本编辑 -->
+                <div class="content">
+                    <div class="article-content">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="footer">
+                <div class="tool">
+                    <p>添加图片</p>
+                    <i class="iconfont icon">&#xe632;</i>
+                    <input class="input-file"  type="file" name="fileInput" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
+                </div>
+            </div>
+    </div>
+    <script>
+        
+         var vm = new Vue({
+            el:"#app",
+            data(){
+                return {
+                    /* 文章高度 */
+                    scrollHeight:null,
+                    /* 滚动id */
+                    id:'',
+                    /* 问题内容 */
+                    questiondetail:[],
+                    /* 回复内容 */
+                    content:"",
+                }
+            },
+            mounted(){
+                /* 编辑器初始化 */
+                $('.article-content').artEditor({
+                    imgTar: '.input-file',
+                    limitSize: 5,   // 兆
+                    showServer: false,
+                    uploadUrl: '',
+                    data: {},
+                    uploadField: 'image',
+                    placeholader: '请输入回复内容',
+                    validHtml: ["br"],
+                    beforeUpload: function(imgBase64) {
+                        // 处理完之后，必须return图片数据 
+                        $.ajaxSettings.async = false;
+                        let s = null;
+                         $.post("{:U('question/base64ToImg')}",{base64:imgBase64},(response)=>{
+                            s = JSON.parse(response);
+                        })
+                        return s;
+                    },
+                });
+                /* 设置内容高度 */
+                this.scrollHeights();
+                /* 获取问题id参数 */
+                let id = this.getQueryString("id");
+                let _this = this;
+                if(!!id){
+                    this.id = id;
+                    this.$http.post('../question/question',{id:id},{emulateJSON : true}).then((response)=>{
+                        console.log(response.data);
+                        _this.questiondetail = response.data;
+                    })
+                }else{
+                    console.log("参数错误");
+                }
+                
+            },
+            methods:{
+                /* 发送回复 */
+                handelSend(){
+                    let _this = this;
+                    this.content = $(".article-content").html();
+                    if(this.content.indexOf("请输入回复内容")!= -1 ||this.content == ""){
+                        openLayer("请输入回复内容");
+                        return
+                    }
+                    this.$http.post('../question/questionDetail',{questionId:_this.id,content:_this.content},{emulateJSON : true}).then((response)=>{
+                        console.log(response.data);
+                        if(response.data == 1){
+                            location.href = './question.html?id='+this.id;
+                        }else{
+                            console.log("回复出错");
+                        }
+                    })
+                },
+                handelBack(e){
+                    location.href = "./questionlist.html";
+                },
+                /* 设置滚动内容高度函数 */
+                scrollHeights(){
+                    let _this = this;
+                    setTimeout(function(){
+                        let header = $(".header").height();
+                        let footer = $(".footer").height();
+                        let con = $(window).height();
+                        let l = con - header - footer -5;
+                        _this.scrollHeight = l;
+                    })
+                   
+                },
+                 /* 获取参数 */
+                 getQueryString(name) {
+                    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+                    var r = window.location.search.substr(1).match(reg);  //这里返回找到正则的匹配
+                    if (r != null) {
+                        return unescape(r[2]);    //这里返回对应的值
+
+                    }
+                    return null;
+                },
+            }
+        })
+    </script>
+   <script>
+        function openLayer(str){
+            console.log(str);
+            new layermy(str).append();
+        }
+    </script>
+</body>
+</html>

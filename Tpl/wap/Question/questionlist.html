@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="__WCSS__/base.css">
+    <link rel="stylesheet" type="text/less" href="__WCSS__/comment/questionList.less?1212">
+    <script type="text/javascript" src="__WJS__/reset.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/less.js/3.0.4/less.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/bscroll.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/vue-resource.js"></script>
+    <title>点子大厅</title>
+    <style>
+   @font-face {
+    font-family: 'iconfont';  /* project id 803693 */
+    src: url('//at.alicdn.com/t/font_803693_8jy3diz6lf.eot');
+    src: url('//at.alicdn.com/t/font_803693_8jy3diz6lf.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_803693_8jy3diz6lf.woff') format('woff'),
+    url('//at.alicdn.com/t/font_803693_8jy3diz6lf.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_803693_8jy3diz6lf.svg#iconfont') format('svg');
+    }
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap"  id="app">
+        <!-- 头部 -->
+        <div class="header" ref="header">
+            <div class="search-wrap">
+                <i class="iconfont back" @click="handelBack">&#xe682;</i>
+                <div class="left-input" @click="handelToSearch">
+                    <i class="iconfont">&#xe609;</i>
+                    <p>搜索</p>
+                </div>
+                <div class="right-question" @click="handelToReport">
+                    <i class="iconfont">&#xe669;</i>
+                    <p>提问</p>
+                </div>
+            </div>
+        </div>
+        <!-- 内容列表 -->
+        <div class="main wrapper" ref="wrapper" :style="{ height: scrollHeight +'px'}">
+            <ul class="list imgList">
+                <li class="item" v-for="item in questionList" @click="handelToQuestion(item.id)" data-id="item.id">
+                    
+                    <div class="item-con">
+                        <p class="mesg">{{item.title}}</p>
+                        <div class="baseClass">
+                            <img class="baseImg" :onerror="errorImg01"  v-if="item.thumbnail" :src="item.thumbnail" alt="">
+                        </div>
+                    </div>
+                    <div class="hot-score">
+                        <p class="item-agree">
+                            <i class="iconfont" style="color:#FF5722">&#xe630;</i>
+                             <span>{{item.pv}}</span>
+                        </p>
+                        <p class="item-score">奖励积分:{{item.amount}}</p>
+                    </div>
+                    <div class="toptime">
+                            <div class="username">
+                                创建人:{{item.username}}
+                            </div>
+                            <div class="time">{{item.start_time}}</div> 
+                    </div>
+                </li>
+                <div v-if="!moreLoadData" class="nomoredata">没有更多数据了...</div>
+            </ul>
+            
+        </div>
+        <!-- 个人中心 -->
+        <div class="center" @click="handelToCenter">我的</div>
+    </div>
+    <script>
+       var vm = new Vue({
+            el: '#app',
+            data: {
+                questionList:[
+                    
+                ],
+                page:0,
+                /* 上拉是否有更多数据 */
+                moreLoadData:true,
+                /* 滚动高度 */
+                scrollHeight:0,
+                /* 加载锁 */
+                lock:false,
+                errorImg01:"this.src='__WIMG__/default.jpg'"
+            },
+
+            computed:{
+                
+            },
+            mounted(){
+                if (window.history && window.history.pushState) {
+                    history.pushState(null, null, document.URL);
+                    window.addEventListener('popstate', this.goBack, false);
+                }
+                this.scrollHeights();
+                /* 初始化数据 */
+                this.initData();
+            },
+            methods: {
+                goBack(){
+                    location.href = "../Index/index.html";
+                },
+                /* 初始化数据 */
+                initData(){
+                    this.$http.post('',{page:this.page},{emulateJSON : true}).then((response)=>{
+                        console.log(response.data);
+                        if(response.data.length>0){
+                            this.page++;
+                            this.questionList = response.data;
+                        }
+                        this.$nextTick(()=>{
+                            /* 设置图片 */
+                            this.getNaturalSize();
+                            let conHeight = $(".list").height();
+                            let scroll = $(".main").height();
+                            console.log(scroll+':'+conHeight);
+                            if(scroll > conHeight){
+                                this.loadData();
+                            }
+                        })
+                    })
+                    this.$nextTick(() => {
+                        if (!this.scroll) {
+                           
+                            this.scroll = new BScroll(this.$refs.wrapper, {
+                                click:true,
+                                // scrollY: true,
+                                /* 上拉加载 */
+                                pullUpLoad: {
+                                    threshold: -40,
+                                },
+                                pullDownRefresh: {
+                                    threshold: 30, // 下拉距离超过30px触发pullingDown事件
+                                } 
+                            })
+                           /* 上拉加载 */
+                            this.scroll.on('pullingUp', (e) => {
+                                this.loadData();
+                                this.scroll.finishPullUp();
+                            })
+                            this.scroll.on('pullingDown', (e) => {
+                                this.pullDown();
+                                this.scroll.finishPullDown();
+                               
+                            })
+                        }
+                    })
+                },
+                /* 上拉加载 */
+                loadData() {
+                    if(this.lock){
+                        return 
+                    }
+                    this.lock = true;
+                    this.$http.post('',{page:this.page},{emulateJSON : true}).then((response)=>{
+                        console.log(response.data);
+                        if(response.data.length>0){
+                            this.moreLoadData = true;
+                            this.page++;
+                            this.questionList = this.questionList.concat(response.data);
+                        }else{
+                            this.moreLoadData = false;
+                        }
+                        this.lock = false;
+                        this.getNaturalSize();
+                    })
+                    this.scroll.refresh();
+                },
+                /* 下拉刷新更多数据 */
+                pullDown(){
+                    if(this.lock){
+                        return 
+                    }
+                    this.lock = true;
+                    this.$http.post('',{model:1,questionId:this.questionList[0].id},{emulateJSON : true}).then((response)=>{
+                        if(response.data.length>0){
+                            this.questionList = response.data.concat(this.questionList);
+                        }
+                        this.lock = false;
+                        this.getNaturalSize();
+                    })
+                    this.scroll.refresh();
+                },
+                /* 搜索 */
+                handelToSearch(e){
+                    location.href = "./search.html";
+                },
+                /* 提问 */
+                handelToReport(e){
+                    location.href = "./report.html";
+                },
+                /* 退回金点子 */
+                handelBack(){
+                    location.href = "../Index/index.html";
+                },
+                /* 到详情页 */
+                handelToQuestion(id){
+                    location.href = "./question.html?id="+id;
+                },
+                /* 到个人中心 */
+                handelToCenter(){
+                    location.href = "./center.html";
+                },   
+                /* 设置滚动内容高度函数 */
+                scrollHeights(){
+                    let _this = this;
+                    setTimeout(function(){
+                        let header = $(".header").height();
+                        let con = $(window).height();
+                        let l = con - header  -5;
+                        _this.scrollHeight = l;
+                    })
+                   
+                },
+                /* 获取图片宽高 */
+                getNaturalSize() {
+                    let s = $(".imgList img");
+                    let length = $(".imgList img").length;
+                    for(let i = 0;i < length;i++){
+                        let src = s[i].src;
+                        var img=new Image();
+                        img.src = src;
+                        var realWidth = img.width;
+                        var realHeight = img.height;
+                        if(realWidth > realHeight){
+                            $(s[i]).addClass("imgWidth");
+                            $(s[i]).parent('div').addClass("widthWrap"); 
+                        }else{
+                            $(s[i]).addClass("imgHeight");  
+                            $(s[i]).parent('div').addClass("heightWrap");
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

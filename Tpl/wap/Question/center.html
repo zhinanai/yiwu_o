@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="__WCSS__/base.css">
+    <link rel="stylesheet" type="text/less" href="__WCSS__/comment/center.less?111">
+    <script type="text/javascript" src="__WJS__/reset.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/less.js/3.0.4/less.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/vue-resource.js"></script>
+    <title>个人中心</title>
+    <style>
+    @font-face {
+        font-family: 'iconfont';  /* project id 803693 */
+        src: url('//at.alicdn.com/t/font_803693_gblcvdhagfr.eot');
+        src: url('//at.alicdn.com/t/font_803693_gblcvdhagfr.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_803693_gblcvdhagfr.woff') format('woff'),
+        url('//at.alicdn.com/t/font_803693_gblcvdhagfr.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_803693_gblcvdhagfr.svg#iconfont') format('svg');
+    }
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap" id="app">
+        <div class="center" >
+            <div v-for="item in userInfo.userInfo">
+                <img class="userhead" :src="'/Public/home/wap/heads/'+item.img_head" alt="">
+                <p class="username">{{item.username}}</p>
+            </div>
+        </div>
+
+        <!-- 导航 -->
+        <ul class="navlist">
+            <li class="item" @click="handelToQuestionlist">
+                <i class="iconfont icon" style="color:#55a892">&#xe65d;</i>
+                <p class="title">点子大厅</p>
+            </li>
+            <li class="item" @click="handelToMyTask(2)">
+                <i class="iconfont icon" style="color:#e69d43">&#xe60a;</i>
+                <p class="title">我的问题</p>
+                <span class="num">{{userInfo.userQ}}</span>
+            </li>
+            <li class="item" @click="handelToMyTask(1)">
+                <i class="iconfont icon" style="color:#478fdb">&#xe6a0;</i>
+                <p class="title">我的点子</p>
+                <span class="num">{{userInfo.userA}}</span>
+            </li>
+        </ul>
+    </div>
+    <script>
+         var vm = new Vue({
+            el:"#app",
+            data: {
+                userInfo:{},
+            },
+            mounted(){
+                /* 获取用户信息 */
+                this.getUserInfo();
+            },
+            computed:{
+                userId:function(){
+                    if(!!(this.userInfo.userInfo.length >0)){
+                       return this.userInfo.userInfo[0].userid;
+                    }else{
+                        return ''
+                    }
+                }
+            },
+            methods:{
+                handelToQuestionlist(){
+                    location.href = './questionlist.html';
+                },
+                handelToMyTask(model){
+                    location.href = './mytask.html?model='+model;
+                },
+                /* 获取用户信息 */
+                getUserInfo(){
+                    this.$http.post('./getUserInfo',{},{emulateJSON:true}).then((response)=>{
+                        console.log(response.data);
+                        if(response.data){
+                            this.userInfo = response.data;
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+   
+</body>
+</html>

@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>  {$Think.lang.login}</title>
+<link rel="stylesheet" href="__WCSS__/login.css?111">
+<link rel="stylesheet" href="__WCSS__/normalize.css">
+<script src="__WJS__/jquery1.11.1.min.js"></script>
+<script src="__WJS__/rem.js"></script>
+<script src="__WJS__/cookie.js"></script>
+<body class="bgf5">
+<style>
+
+</style>
+<div class="login-container">
+	<div class="language">
+		<div class="yuyan">
+			<span>{$Think.lang.lang}:</span>
+			<select   onchange="gradeChange(this.value)">
+				<option <?php  if($_GET['l']=="zh-cn"||!isset($_GET['l'])) echo "selected";?> 	value="zh-cn">{$Think.lang.lang1}</option>
+				<option  <?php  if($_GET['l']=="en-us") echo "selected";?>	value="en-us">{$Think.lang.lang2}</option>
+			</select>
+	    </div>
+	</div>
+	<div class="formbox">
+		<div class="logo">
+			<img src="__WIMG__/logo.png">
+		</div>
+		<form name="formlogin" id="loginForm" class="formlogin" method="post" action="{:U('Login/checkLogin')}">
+			<div class="input_box">
+				<input type="text" id="phone" name="account" class="username" placeholder="{$Think.lang.mobile}/UID" autocomplete="off"/>
+			</div>
+			<div class="input_box">
+				<input type="password" id="password" name="password" class="password" placeholder="{$Think.lang.loginpwd}" oncontextmenu="return false" onpaste="return false" />
+			</div>
+			<div  class="inde-btn">
+				<button id="submit" type="button" onclick="login()">{$Think.lang.login1}</button>
+			</div>
+			<div class="password">
+				<a href="{:U('login/getpsw')}">{$Think.lang.forget_pwd}</a>
+			</div>
+			
+			<div class="extra_btn">
+				<a href="{:U('Login/register')}">{$Think.lang.has_account}</a>
+		    </div>
+		</form>
+	</div>
+</div>
+<script>
+	let userInfo = getCookie('userInfo');
+	if(userInfo){
+		let getValue = JSON.parse(userInfo);
+		$("#phone").val(getValue.phone);
+		$('#password').val(getValue.password);
+	}
+	/* 登陆时设置cookie */
+	$("#submit").click(()=>{
+		let phone = $("#phone").val();
+		let password = $('#password').val();
+		let user = {
+			phone:phone,
+			password:password
+		}
+		let saveValue = JSON.stringify(user);
+		setCookie('userInfo',saveValue,7);
+	})
+</script>
+</body>
+<script>
+function gradeChange(ss){
+
+       window.location.href="?l="+ss;
+       }
+
+</script>
+
+<!--<script src="__WJS__/common.js"></script>-->
+
+<!--表单验证-->
+<script src="__WJS__/jquery.validate.min.js?var1.14.0"></script>
+<!--commonjs-->
+<script type="text/javascript" src="__COM__/layer/layer.js" ></script>
+<script type="text/javascript" src="__COM__/js/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="__COM__/layer/layer.js"></script>
+<script type="text/javascript" src="__COM__/js/index.js"></script>
+</html>

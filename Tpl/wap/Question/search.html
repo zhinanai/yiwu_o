@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="__WCSS__/base.css">
+    <link rel="stylesheet" type="text/less" href="__WCSS__/comment/search.less?1">
+    <script type="text/javascript" src="__WJS__/reset.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/less.js/3.0.4/less.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/bscroll.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/vue-resource.js"></script>
+    <title>搜索问题</title>
+    <style>
+    @font-face {
+        font-family: 'iconfont';  /* project id 803693 */
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot');
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.woff') format('woff'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.svg#iconfont') format('svg');
+    }
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap" id="app">
+        <!-- 头部搜索 -->
+        <div class="header">
+            <div class="search-wrap">
+                <i class="iconfont back" @click="handelBack">&#xe682;</i>
+                <input @input="handelInput" v-model="searchValue" class="input" type="text" placeholder="搜索问答内容">
+            </div>
+        </div>
+        <!-- 内容 -->
+        <div class="main"  ref="wrapper" :style="{ height: scrollHeight +'px'}">
+            <!-- 默认热门列表 -->
+            <div class="default-con" v-if="showDefault">
+                <h3 class="title">热搜</h3>
+                <ul class="default-list">
+                    <li class="item" v-for="(item,index) in defaultList" @click="handelToQuestion(item.id)">
+                        <div class="left-index" :class="{dot:index<3}">{{index+1}}</div>
+                        <div class="right-con">
+                            <h4 class="item-tit">{{item.title}}</h4>
+                            <!-- <p class="item-mesg">{{item.mesg}}</p> -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- 搜索列表 -->
+            <div class="search-con" v-else>
+                <ul class="search-list">
+                    <li class="item" v-for="(item,index) in searchList" @click="handelToQuestion(item.id)">
+                        <i class="iconfont icon">&#xe609;</i>
+                        <p class="title">{{item.title}}</p>
+                    </li>
+                </ul>
+                <div class="nomoredata" v-if="!moreLoadData">没有更多数据..</div>
+            </div>
+        </div>
+    </div>
+    <script>
+            Vue.config.devtools = true;
+            let timer = null;
+            var vm = new Vue({
+                 el: '#app',
+                 data: {
+                    page:0,
+                     /* 搜索关键字 */
+                    searchValue: "",
+                    
+                    /* 默认热门搜索列表 */
+                    defaultList: [],
+                    /* 搜索列表 */
+                    searchList: [],
+                    /*加载更多搜索数据 */    
+                    moreLoadData:true, 
+                    scrollHeight:0, 
+                    /* 加载锁 */
+                    lock:false,  
+                },
+                computed:{
+                    /* 是否显示热门搜索 */
+                    showDefault:function(){
+                        return this.searchValue? false: true
+                    }
+                },
+                mounted(){
+                    this.scrollHeights();
+                    /* 初始化加载数据 */
+                    this.initData();
+                    this.$nextTick(() => {
+                        if (!this.scroll) {
+                            this.scroll = new BScroll(this.$refs.wrapper, {
+                                click:true,
+                                // scrollY: true,
+                                /* 上拉加载 */
+                                pullUpLoad: {
+                                    threshold: -40,
+                                }
+                            })
+                           /* 上拉加载 */
+                            this.scroll.on('pullingUp', (e) => {
+                                this.pullingUpData();
+                                this.scroll.finishPullUp();
+                            })
+                        }
+                        
+                    })
+                },
+                methods: {
+                    /* 初始化热门搜索 */
+                    initData(){
+                        this.$http.post('./hostQuestion',{},{emulateJSON : true}).then((response)=>{
+                            console.log(response.data);
+                            if(response.data.length>0){
+                                this.defaultList = response.data;
+                            }
+                        })
+                    },
+                    /* 获取搜索数据 */
+                    getSearchData(){
+                        this.page = 0;
+                        this.$http.post('./searchTitle',{page:0,search:this.searchValue},{emulateJSON : true}).then((response)=>{
+                            console.log(response.data);
+                            if(response.data.length > 0){
+                                this.page++;
+                                this.moreLoadData = false;
+                            }else{
+                                this.moreLoadData = false;
+                            }
+                            this.searchList = response.data;
+                            let conHeight = $(".search-con").height();
+                            let scroll = $(".main").height();
+                            if(scroll > conHeight){
+                                this.pullingUpData();
+                            }
+                        })
+                    },
+                    /* 上拉加载 */
+                    pullingUpData(){
+                        if(this.lock){
+                            return 
+                        }
+                        this.lock  = true;
+                        this.$http.post('./searchTitle',{page:this.page,search:this.searchValue},{emulateJSON : true}).then((response)=>{
+                            if(response.data.length>0){
+                                this.page++;
+                            }else{
+                                this.moreLoadData = false;
+                            }
+                            this.searchList = this.searchList.concat(response.data);
+                            this.lock = false;
+                        })
+                        this.scroll.refresh();
+                    },
+                    /* 跳转到问题页 */
+                    handelToQuestion(id){
+                        location.href = "./question?id="+id;
+                    },
+                    /* 停止输入后两秒获取数据 */
+                    handelInput(e){
+                        clearInterval(timer);
+                        timer = setInterval(()=>{
+                            
+                            this.getSearchData();
+
+                            clearInterval(timer);
+                        },500);
+                    },
+                    /* 返回 */
+                    handelBack(e){
+                        history.go(-1);
+                    },
+                     /* 设置滚动内容高度函数 */
+                    scrollHeights(){
+                        let _this = this;
+                        setTimeout(function(){
+                            let header = $(".header").height();
+                            let con = $(window).height();
+                            let l = con - header  -20;
+                            _this.scrollHeight = l;
+                        })
+                    },
+                }
+             })
+         </script>
+</body>
+</html>

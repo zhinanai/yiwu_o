@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="__WCSS__/base.css">
+    <link rel="stylesheet" type="text/less" href="__WCSS__/comment/question.less?1121213">
+    <script src="__WJS__/jquery1.11.1.min.js"></script>
+    <script type="text/javascript" src="__WJS__/reset.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/less.js/3.0.4/less.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/vue-resource.js"></script>
+    <script src="__WJS__/layer.js?11"></script>
+    <title>问题内容</title>
+    <style>
+    @font-face {
+        font-family: 'iconfont';  /* project id 803693 */
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot');
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.woff') format('woff'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.svg#iconfont') format('svg');
+    }
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap" id="app">
+         <!-- 头部 -->
+         <div class="header">
+                <div class="search-wrap" >
+                    <i class="iconfont back" @click="handelBack">&#xe682;</i>
+                    <input @click="handelToSearch"  class="input" type="text" placeholder="搜索问答内容" readonly>
+                </div>
+        </div>
+        <!-- 内容 -->
+        <div class="main">
+            <!-- 标题 -->
+            <div class="question-wrap" v-for="item in questiondetail">
+                <div class="toptime">
+                        <div class="username">
+                            创建人:{{item.username}}
+                        </div>
+                        <div class="time">{{item.start_time}}</div> 
+                </div>
+                <div >
+                    <div class="title">{{item.title}}</div>
+                </div>
+                <div class="content" v-html="content">
+                </div>
+                <div class="answer-btn" >
+                    <div class="answer" v-if="isShow == 1">
+                        <i class="iconfont">&#xe603;</i>
+                        <p>追加提问</p>
+                    </div>
+                    <div class="answer" @click="handelToAnswer" v-else>
+                        <i class="iconfont">&#xe603;</i>
+                        <p>写回答</p>
+                    </div>
+                    
+                    <p class="scroce">奖励积分:{{item.amount}}</p>
+                </div>
+            </div>
+
+            <!-- 回答列表 -->
+            <div class="answer-list">
+                <div class="item" v-for="(item,index) in answerlist">
+                    <div class="userInfo">
+                        <img class="head-img" :src="'/Public/home/wap/heads/'+item.img_head" alt="">
+                        <p class="username">{{item.username}}</p>
+                        <p class="getAnswer" v-if="item.is_it_best == 1">已采纳</p>
+                    </div>
+                    <!-- 回答内容 -->
+                    <div class="content" v-html="item.content">
+                        
+                    </div>
+                    <div class="time">{{item.answer_time}}</div>
+                    <!-- 赞同按钮 -->
+                    <div v-if="status == 2">
+                            <div class="agreeBtn" v-if="isShow == 1">
+                                    <div class="agree" @click="handelAdoptQuestion(item.id,item.uid)">采纳回答</div>
+                            </div>
+                    </div>
+                        
+                </div>
+            </div>
+
+        </div>
+        <!-- end app -->
+    </div>
+
+    <script>
+        Vue.config.devtools = true;
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                /* 问题id */
+                id:'',
+                questiondetail:[],
+                content:"",
+                /* 回复列表 */
+                answerlist:[],
+            },
+            mounted(){
+                if (window.history && window.history.pushState) {
+                    history.pushState(null, null, document.URL);
+                    window.addEventListener('popstate', this.goBack, false);
+                }
+            },
+            computed:{
+                isShow:function(){
+                    if(this.questiondetail.length>0){
+                        return this.questiondetail[0].is_show;
+                    }
+                    return 2;
+                },
+                status:function(){
+                    if(this.questiondetail.length>0){
+                        return this.questiondetail[0].status;
+                    }
+                    return 2;
+                }
+            },
+            created(){
+                let id = this.getQueryString("id");
+                let _this = this;
+                if(!!id){
+                    this.id = id;
+                    this.$http.post('',{id:id},{emulateJSON : true}).then((response)=>{
+                        console.log(response.data);
+                        _this.questiondetail = response.data;
+                        this.content =  _this.escape2Html(response.data[0].content);
+                    })
+                    this.$http.get("./questionDetail?questionId="+this.id,{emulateJSON : true}).then((response)=>{
+                        console.log(response.data);
+                        this.answerlist = response.data;
+                    })
+                }else{
+                    console.log("参数错误");
+                }
+            },
+            methods: {
+                goBack(){
+                    location.href = "./questionlist.html";
+                },
+                /* 跳转到搜索 */
+                handelToSearch(){
+                    location.href = './search.html';
+                },
+                /* 返回 */
+                handelBack(){
+                    location.href = './questionlist.html';
+                },
+                handelToAnswer(){
+                    location.href = './answer.html?id='+this.id;
+                },
+                /* 获取参数 */
+                getQueryString(name) {
+                    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+                    var r = window.location.search.substr(1).match(reg);  //这里返回找到正则的匹配
+                    if (r != null) {
+                        return unescape(r[2]);    //这里返回对应的值
+
+                    }
+                    return null;
+                },
+                /* html转译 */
+                escape2Html(str) {
+                    var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
+                    return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];});
+                },
+                 /* 采纳回答 */
+                 handelAdoptQuestion(id,uid){
+                    console.log(id);
+                    this.$http.post('./adoptQuestion',{questionId:this.id,answerUserId:uid,answerId:id},{emulateJSON : true}).then((response)=>{
+                        console.log(response.data);
+                        if(response.data == 1){
+                            openLayer("采纳成功，此问题已结束");
+                            setTimeout(()=>{
+                                location.reload();
+                            },1000);
+                        }else{
+                            openLayer(response.data.msg);
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+    <!-- 弹窗提示框 -->
+<script>
+        function openLayer(str){
+            console.log(str);
+            new layermy(str).append();
+        }
+    </script>
+</body>
+</html>

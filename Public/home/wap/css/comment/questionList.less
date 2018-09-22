@@ -1,0 +1,210 @@
+.ellipsis-mult(@n: 3) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: @n;
+    word-break: break-all;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: normal;  
+} 
+.wrap{
+    width: 100%;
+}
+.wrap .header{
+    height: 1.16rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    background-color: white;
+}
+.search-wrap{
+    width: 7.18rem;
+    border-radius: 5px;
+    background-color: #ebebeb;
+    display: flex;
+    padding: 0.18rem 0;
+    font-size: .32rem;
+    color: #525252;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    .back{
+        font-size: .4rem;
+    padding: 0 .3rem;
+    }
+}
+.header .left-input{
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-right: 1px solid #b5b5b5;
+    border-left: 1px solid #b5b5b5;
+}
+.header .left-input i{
+    margin: 0 .35rem;
+    width: .4rem;
+    font-size: .4rem;
+    font-weight: bold;
+}
+.header .right-question{
+    flex-basis: 1.86rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+.header .right-question i{
+    margin: 0 .25rem;
+    width: .4rem;
+    font-size: .4rem
+}
+
+/* main */
+.main{
+    width: 100%;
+    margin-top: 1.16rem;
+    overflow: hidden;
+    .list{
+        .nomoredata{
+            line-height: 1rem;
+            color: #ddd;
+            text-align: center;
+            font-size: .3rem;
+            height: 1rem;
+        }
+        .hot-score{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: .1rem;
+            .item-score{
+                font-size: .3rem;
+                margin-top: .25rem;
+                color: #0874fe;
+            }
+        }
+    }
+}
+
+.main .item{
+    padding: .3rem;
+    border-top: .1rem solid #eaeaea;
+    border-bottom: 1px solid #c0c0c0;
+}
+.main .item .item-title{
+    font-weight: bold;
+    width: 100%;
+    text-align: left;
+    font-size: .36rem;
+    color: #070707;
+    text-overflow:ellipsis;  
+    white-space: normal;  
+    display:-webkit-box;  
+    -webkit-box-orient:vertical;  
+    -webkit-line-clamp:2;/*规定最多显示两行*/  
+    overflow: hidden;
+    padding: .1rem 0;
+}
+.main .item .item-con{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.main .item-con p{
+    font-weight: bold;
+    text-align: left;
+    flex: 1;
+    color: #070707;
+    font-size: .3rem;
+    line-height: .5rem;
+    text-overflow:ellipsis;  
+    white-space: normal;  
+    display:-webkit-box;  
+    -webkit-box-orient:vertical;  
+    -webkit-line-clamp:3;/*规定最多显示两行*/  
+    overflow: hidden;
+}
+.main{
+    .toptime{
+        display: flex;
+        justify-content: space-between;
+        font-size: .3rem;
+        align-items: center;
+        height: .5rem;
+        margin-top: .2rem;
+        color: #8a8a8a;
+        .username{
+            .ellipsis-mult(1);
+            width: 3rem;
+            text-align: left;
+        }
+    }
+    .item-con{
+        .widthWrap{
+            width: 2.6rem;
+            height: auto;
+        }
+        .heightWrap{
+            width: auto;
+            height: 1.6rem;
+        }
+        .imgWidth{
+            display: block !important;
+            height: auto !important;
+            width: 100% !important;
+            border-radius: 5px; 
+            margin-left: .15rem;
+            border: 1px solid #e1e1e1;
+        }
+        .imgHeight{
+            display: block !important;
+            width: auto !important;
+            height: 100% !important;
+            border-radius: 5px; 
+            margin-left: .15rem;
+            border: 1px solid #e1e1e1;
+        }
+        .baseClass{
+            max-width: 2.4rem;
+            max-height: 1.6rem;
+            overflow: hidden;
+        }
+        .baseImg{
+            display: none;
+        }
+    }
+}
+
+.main .item-agree{
+    font-size: .3rem;
+    margin-top: .25rem;
+    color: #8a8a8a;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* 个人中心 */
+.center{
+    position: fixed;
+    bottom: 1rem;
+    right: .5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: #2088db;
+    color: white;
+    font-size: .3rem;
+    text-align: center;
+    line-height: 1rem;
+    z-index: 99;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #272727;
+}

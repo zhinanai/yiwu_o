@@ -1,0 +1,164 @@
+
+.ellipsis-mult(@n: 3) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: @n;
+    word-break: break-all;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: normal;  
+}    
+.wrap{
+    width: 100%;
+}
+.wrap .header{
+    height: 1.16rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border-bottom: 1px solid #c4c4c4;
+    box-shadow: 0 2px 20px -5px #b3b3b3;
+}
+.search-wrap{
+    width: 7.18rem;
+    border-radius: 5px;
+    background-color: #ebebeb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.18rem 0;
+    font-size: .32rem;
+    color: #525252;
+}
+.search-wrap .back{
+    margin: 0 .3rem;
+    flex-basis: .45rem;
+    font-size: .4rem;
+    text-align: center;
+    display: block;
+    width: 1rem;
+}
+.search-wrap .input{
+    flex: 1;
+    margin-right: .5rem;
+    padding: .1rem;
+    background-color:#ebebeb;
+    border: none;
+    color: #575757;
+    font-size: .35rem;
+}
+.search-wrap .input:focus{
+    outline:none
+}
+/* 内容 默认 */
+.main{
+    margin-top: 1.16rem;
+    overflow: hidden;
+}
+.main .default-con{
+    padding: 0 .3rem;
+    margin-top: .3rem;
+    .title{
+        font-size: .35rem;
+        font-weight: bold;
+        color: #191919;
+        padding: .1rem 0;
+        text-align: left;
+    }
+    .default-list{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .item{
+            padding: .2rem 0;
+            font-size: .3rem;
+            width: 50%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            .left-index{
+                color: #c1c1c1;
+                margin-top: .05rem;
+            }
+            .dot{
+                color: #f98100;   
+            }
+            .right-con{
+                margin-left: .2rem;
+                .item-tit{
+                    text-align: left;
+                    width: 2.8rem;
+                    text-overflow:ellipsis;  
+                    white-space: normal;  
+                    display:-webkit-box;  
+                    -webkit-box-orient:vertical;  
+                    -webkit-line-clamp:2;/*规定最多显示两行*/  
+                    overflow: hidden;
+                    color: #292929;
+                    font-size: .3rem;
+                    line-height: .4rem;
+                }
+                
+                .item-mesg{
+                    text-align: left;
+                    width: 2.8rem;
+                    text-overflow:ellipsis;  
+                    white-space: normal;  
+                    display:-webkit-box;  
+                    -webkit-box-orient:vertical;  
+                    -webkit-line-clamp:1;/*规定最多显示两行*/  
+                    overflow: hidden;
+                    color: #8b8b8b;
+                    line-height: .4rem;
+                    font-size: .25rem;
+                }
+            }
+        }
+    }
+}
+/* 搜索 */
+.search-con{
+    padding: 0 .3rem;
+    .search-list{
+        width: 100%;
+        .item{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: .3rem;
+            color: #383838;
+            padding: .2rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            .icon{
+                padding: 0 .15rem;
+                margin-top: .15rem;
+            }
+            .title{
+                margin-left: .15rem;
+                width: 5.6rem;
+                white-space: normal;  
+                .ellipsis-mult(1);
+                text-align: left;
+                line-height: .5rem;
+                font-size: .35rem;
+            }
+        }
+    }
+    .nomoredata{
+        line-height: 1rem;
+        color: #ddd;
+        text-align: center;
+        font-size: .3rem;
+        height: 1rem;
+    }
+}

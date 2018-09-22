@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="__WCSS__/base.css">
+    <link rel="stylesheet" type="text/less" href="__WCSS__/comment/report.less?121">
+    <script type="text/javascript" src="__WJS__/reset.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/less.js/3.0.4/less.min.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/editor.js"></script>
+    <script type="text/javascript" src="__WJS__/comment/vue-resource.js"></script>
+    <script type="text/javascript" src="__COM__/layer/layer.js"></script>
+    <script type="text/javascript" src="__COM__/js/index.js"></script>
+    <title>提问</title>
+    <style>
+    @font-face {
+        font-family: 'iconfont';  /* project id 803693 */
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot');
+        src: url('//at.alicdn.com/t/font_803693_utrulktu2oa.eot?#iefix') format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.woff') format('woff'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_803693_utrulktu2oa.svg#iconfont') format('svg');
+    }
+    .iconfont {
+        font-family:"iconfont" !important;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap" id="app">
+        <div class="header" ref="header">
+            <i class="iconfont icon" @click="handelBack">&#xe602;</i>
+            <p class="title">提问</p>
+            <div class="next" @click="handelSubmit">下一步</div>
+        </div>
+
+        
+        <div class="main" :style="{ height: scrollHeight +'px'}">
+            <div class="input-wrap">
+                <input v-model="title" type="text" placeholder="请输入标题">
+            </div>
+            <div class="input-wrap">
+                <input v-model="amount"  type="text" @input="handleInput" placeholder="请输入悬赏积分">
+            </div>
+            <!-- 文本编辑 -->
+            <div class="content">
+                <div class="article-content">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="footer">
+            <div class="tool">
+                <p>添加图片</p>
+                <i class="iconfont icon">&#xe632;</i>
+                <input class="input-file"  type="file" name="fileInput" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Vue.config.devtools = true;
+         var vm = new Vue({
+            el:"#app",
+            data: {
+                scrollHeight:0,
+                /* 提问标题 */
+                title:"",
+                content: "",
+                /* 悬赏积分 */
+                amount: "",
+                
+            },
+            
+            computed:{
+            },
+            methods:{
+                handleInput(e){
+                    this.amount=e.target.value.replace(/\D/g,'');
+                },
+                handelBack(e){
+                    history.go(-1);
+                },
+                /* 输入标题提交数据方法 */
+                handelSubmit(){
+                    if(!this.title){
+                        msg_alert("请输入标题");
+                        return 
+                    }else if(parseInt(this.amount) < 0 || this.amount == ""){
+                        msg_alert("请输入正确的悬赏积分");
+                        return ;
+                    }else{
+                    /* 此处发请求提交数据 */
+
+                    /* 内容数据 标题变量为 this.title */ 
+                        this.content = $(".article-content").html();
+                        if(this.content.indexOf("请输入问题描述") != -1){
+                            this.content = "";
+                        }
+                        this.$http.post('',{amount:this.amount,title:this.title,content:this.content},{emulateJSON : true}).then((response)=>{
+                            console.log(response.data);
+                            if(response.data.msg){
+                                msg_alert(response.data.msg);
+                                return 
+                            }
+                            /* 成功跳转到question页面显示 返回问题id*/
+                            location.href = "./question.html?id="+response.data
+                        })
+                        
+                        
+                    }
+                },
+                /* 设置滚动内容高度函数 */
+                scrollHeights(){
+                    let _this = this;
+                    setTimeout(function(){
+                        let header = $(".header").height();
+                        let footer = $(".footer").height();
+                        let con = $(window).height();
+                        let l = con - header - footer -5;
+                        _this.scrollHeight = l;
+                    })
+                   
+                }
+
+            },
+            mounted(){
+                /* 设置高度 */
+                this.scrollHeights();
+                let _this = this;
+                /* 富文本 */
+                $('.article-content').artEditor({
+                    imgTar: '.input-file',
+                    limitSize: 5,   // 兆
+                    showServer: false,
+                    uploadUrl: '',
+                    data: {},
+                    uploadField: 'image',
+                    placeholader: '请输入问题描述',
+                    validHtml: ["br"],
+                 beforeUpload: function(imgBase64) {
+                    // 处理完之后，必须return图片数据 
+                    $.ajaxSettings.async = false;
+                    let s = null;
+                     $.post("{:U('question/base64ToImg')}",{base64:imgBase64},(response)=>{
+                        s = JSON.parse(response);
+                    })
+                    return s;
+                },
+                uploadSuccess: function(res) {
+                            // 这里是处理返回数据业务逻辑的地方
+                            // `res`为服务器返回`status==200`的`response`
+                            // 如果这里`return <path>`将会以`<img src='path'>`的形式插入到页面
+                            // 如果发现`res`不符合业务逻辑
+                            // 比如后台告诉你这张图片不对劲
+                            // 麻烦返回 `false`
+                            // 当然如果`showServer==false`
+                            // 无所谓咯
+                            console.log(res);
+                        // return res.path;
+                },
+                uploadError: function(res) {
+                        //这里做上传失败的操作
+                        //也就是http返回码非200的时候
+                        console.log(res);
+                    }
+                });
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <title>app下载页</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        /* .wrap{
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: url('./img/bg.jpg') no-repeat;
+            width: 100%;
+            height: 100%;
+            background-size: 100%; 
+        } */
+        .wrap:before {
+            content: ' ';
+            position: fixed;
+            z-index: -1;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('./img/bg.jpg') center 0 no-repeat;
+            background-size: cover;
+        } 
+        .header{
+            margin-top: 10%;
+            color: #cacaca;
+            text-align: center;
+            
+        }
+        .header .logo{
+            width: 20%;
+            margin: 0 auto;
+        }
+        .header .logo img{
+            width: 100%;
+            display: inline-block;
+        }
+        .header .subTitle{
+            text-align: center;
+            margin-top: 10px;
+            padding: 0 15px;
+            font-size: 20px;
+            color: white;
+        }
+        .btn{
+            margin-top: 140%;
+        }
+        .ios{
+            width: 60%;
+            height: 50px;
+            background-color: white;
+            border-radius: 10px;
+            text-align: center;
+            margin: 0 auto;
+            line-height: 50px;
+            color: red;
+            font-size: 20px;
+        }
+        .ios a{
+            text-decoration: none;
+            color: red;
+        }
+         .and:before {
+            content: ' ';
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('./img/and.png') center 0 no-repeat;
+            background-size: cover;
+        } 
+        .toios:before {
+            content: ' ';
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('./img/ios.png') center 0 no-repeat;
+            background-size: cover;
+        } 
+        .layer{
+            display: none;
+            background-color: rgba(0,0,0,0.5);
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="layer"  id="layer">
+
+    </div>
+
+    <div class="wrap">
+        <div class="btn">
+            <!-- <div class="android"><span class="icon"></span>立即下载</div> -->
+            <div class="ios"><a href="" id="links">立即下载</a></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        
+        ;(function (device, platform) {
+    var ua = navigator.userAgent,
+        device_reg = [
+            /(MI(\s+)|2013022|2013023|HM|2014011|2014501|2014813|2014811|2014812|2014817|2014818|2014819|2014502|2015|xiaomi).*/i,
+            /(MI(.*|\s*)PAD).*/i,
+            /(iPhone | iPod).*/i,
+            /(iPad).*/i,
+            /(Android).*/i,
+            /(iPhone|iPad|iPod|iOS).*/i,
+            /(windows(.*|\s*)phone).*/i
+        ],
+        platform_reg = [
+            /MicroMessenger/i,
+            /MiuiBrowser/ig,
+            /weibo/gi
+        ];
+
+    /*** 判断是否是iphone或者ipod ***/
+    device.isIPhone_Pod = function () {
+        return device_reg[2].test(ua);
+    };
+
+    /*** 判断是否是ipad ***/
+    device.isIPad = function () {
+        return device_reg[3].test(ua);
+    };
+
+    /*** 判断是否是miphone ***/
+    device.isMiPhone = function () {
+        return device_reg[0].test(ua) && !device.isMiPad();
+    };
+
+    /*** 判断是否是MiPad ***/
+    device.isMiPad = function () {
+        return device_reg[1].test(ua);
+    };
+
+    /* 判断是否是Android */
+    device.isAndroid = function () {
+        return device_reg[4].test(ua);
+    };
+
+    /* 判断是否是IOS */
+    device.isIOS = function () {
+        return device_reg[5].test(ua);
+    };
+
+    /*** 判断是否是其它安卓设备 ***/
+    device.isOtherAndroid = function () {
+        return device.isAndroid() && !device.isMiPad() && !device.isMiPhone();
+    };
+
+    /*** 判断是否是pc ***/
+    device.isPC = function () {
+        return !device.isAndroid() && !device.isIOS() && !device.isWinPhone();
+    };
+
+    /*** 判断是否是winphone ***/
+    device.isWinPhone = function () {
+        return device_reg[6].test(ua);
+    };
+
+    /* 判断是否是微信平台 */
+    platform.isWeixin = function () {
+        return platform_reg[0].test(ua);
+    };
+
+    /* 判断是否是小米浏览器 */
+    platform.isMiBrowser = function () {
+        return platform_reg[1].test(ua);
+    };
+
+    /* 判断是否是微博 */
+    platform.isWeibo = function () {
+        return platform_reg[2].test(ua);
+    };
+
+})(window.device || (window.device = {}), window.platform || (window.platform = {}));
+        if(device.isAndroid()){
+            /* 安卓链接 */
+            document.getElementById("links").href="golden-idea.apk";
+            
+        }else if(device.isIOS() && (!platform.isMiBrowser())){
+            /* 苹果链接 */
+            document.getElementById("links").href="golden-idea.apk";
+        }
+        
+        if(platform.isWeixin()&&device.isAndroid()){
+            $('#layer').addClass('and');
+            document.getElementById('layer').style.display = 'block';
+        }
+        if(platform.isWeixin() && device.isIOS() && (!platform.isMiBrowser())){
+            $('#layer').addClass('toios');
+            document.getElementById('layer').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

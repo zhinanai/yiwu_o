@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!--title>{$Think.lang.ucenter}</title-->
+<title>golden idea</title>
+<link rel="stylesheet" href="__WCSS__/style.css?11">
+<link rel="stylesheet" href="__WCSS__/meCen.css?11">
+<!-- <link rel="stylesheet" href="__WCSS__/iconfont.css"> -->
+<!--线上JQ包-->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!--本地JQ包-->
+<!--<script src="__WJS__/jquery1.11.1.min.js"></script>-->
+
+
+<script type="text/javascript" src="__WJS__/jquery.glide.min.js"></script>
+<script type="text/javascript" src="__COM__/layer/layer.js"></script>
+<script type="text/javascript" src="__COM__/js/index.js"></script>
+<script src="__WJS__/layer.js?11"></script>
+<script src="__WJS__/cookie.js"></script>
+<!--<style>
+.big_width100{background: #FBF8EF}
+
+.cen_icon{background: #fff}
+</style>-->
+  <style>
+	.big_width100{
+      background: #FBF8EF;
+		margin-top: 0;
+	}
+	.bg96{
+		margin-top: 0;
+	}
+    .cen_icon{background: #fff;padding-bottom: 20px;}
+    .userInfo .toux_icon img{
+        height: 40px;
+    	box-sizing: border-box;
+	}
+	.top_header{
+		background: -webkit-repeating-linear-gradient(to right,#eeb815, #fee300,#fee300, #eeb815); /* Safari 5.1 - 6.0 */
+		background: -o-repeating-linear-gradient(to right,#eeb815, #fee300,#fee300, #eeb815); /* Opera 11.1 - 12.0 */
+		background: -moz-repeating-linear-gradient(to right,#eeb815, #fee300 ,#fee300, #eeb815); /* Firefox 3.6 - 15 */
+		background: repeating-linear-gradient(to right,#eeb815, #fee300,#fee300, #eeb815); /* 标准的语法（必须放在最后） */
+	}
+    .header{position: relative;padding: 5px 0;height: auto !important;overflow: hidden;background: none;}
+	.header_r a{
+		color: white;
+	}
+	.shaomZ {
+		padding: 10px 0;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+    }
+    .shaomZ .title {
+		text-align: center;
+		padding-right: 10px;
+    }
+    .shaomZ .money{
+		text-align: center;
+		padding: 5px 0;
+	}
+    
+    .herder_bot_Balance{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px;
+    }
+    .herder_bot_Balance .Balance {
+		color: white;
+	}
+    .box img{
+         height: 75px;
+	}
+	.sao{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 10px 0;
+		margin-top: 10px;
+	}
+	.sao img{
+		width: 100px;
+		height: 100px;
+	}
+</style>
+<body class="bg96">
+	<div class="top_header">
+		<div class="header">
+			<div class="userInfo" style="width: 75%">
+				<a href="{:U('User/Personal')}"><div class="toux_icon"><img src="__IMGHEAD__/{$uinfo['img_head']}"></div></a>
+				<div class="uid_xy">
+					<p>UID: {$uinfo['userid']}</p>
+					<p>{$Think.lang.credit}: 
+					<for start="0" end="$uinfo['user_credit']">
+						<span><img src="__WIMG__/aix-icon.png"></span>
+					</for>
+					</p>
+				</div>	
+			</div>
+			<div class="header_r"> <a class="min-fontSize" href="{:U('Index/Bancerecord')}">明细</a></div>
+		</div>
+		<div>
+			<div class="sao">
+				<a onclick="scan();">
+					<img src="__WIMG__/shaom-icon.png?1" alt="">
+				</a>
+			</div>
+			<div class="herder_bot_Balance">
+				<div class="shaomZ">
+						<h1 class="title mid-fontSize">余额:</h1>
+						<p class="money mid-fontSize">{$moneyinfo['cangku_num']|Showtwo}</p>
+				</div>
+				<p class="Balance mid-fontSize">积分：{$moneyinfo['fengmi_num']|Showtwo}</p>
+			</div>
+		</div>
+	</div>
+<div class="big_width100" >
+
+ <div class="cen_icon" style="margin-top: 0;">
+ <php>$quanxian=explode("-",$uinfo['quanxian']);</php>
+
+ 	 <ul>
+ 	 	<li>
+        <if condition="in_array(2,$quanxian)">
+        <a href="###"   class="quanxian">
+        <else/>
+        <a href="{:U('Index/turnout')}">
+        </if> 	 		
+ 	 			<i class="iconfont icon" style="color:#478fdb;">&#xe61b;</i>
+ 	 			<p>{$Think.lang.turnout}</p>
+ 	 		</a>
+ 	 	</li>
+ 	 	<li>
+        <if condition="in_array(1,$quanxian)">
+        <a href="###"   class="quanxian">
+        <else/>
+            <a href="{:U('Growth/Intro')}">
+        </if> 
+				<i class="iconfont icon"  style="color:#df6452;">&#xe613;</i>
+ 	 			<p>{$Think.lang.tochangeinto}</p>
+ 	 		</a>
+ 	 	</li>
+ 	 	<li>
+        <if condition="in_array(3,$quanxian)">
+        <a href="###"   class="quanxian">
+        <else/>
+        <a href="{:U('Growth/Purchase')}">
+        </if> 
+ 	 		
+				<i class="iconfont icon"  style="color:#e69d43;">&#xe660;</i>
+ 	 			<p>{$Think.lang.purchase}</p>
+ 	 		</a>
+ 	 	</li>
+ 	 	<li>
+         <if condition="in_array(4,$quanxian)">
+        <a href="###"   class="quanxian">
+        <else/>
+           
+              <a href="{:U('Trading/SellCentr')}" class="jinyong">
+              <!-- <a href="{:U('Trading/Selldets')}" class="jinyong"> -->
+        </if> 
+
+				<i class="iconfont icon"  style="color:#55a892;">&#xe661;</i>
+ 	 			<p>{$Think.lang.sellout}</p>
+ 	 		</a>
+ 	 	</li>
+			<!-- 需要输出文字和链接 -->
+		  	<li>
+				<a href="{:U('question/questionlist')}">
+					<i class="iconfont icon" style="color:#55a892;">&#xe68e;</i>
+					<p>金点子</p>
+				</a>
+			</li>
+			
+			<li>
+				<a href="javascript:openLayer('该功能即将上线，敬请关注');">
+					<i class="iconfont icon"  style="color:#e69d43;">&#xe7a8;</i>
+					<p>{$Think.lang.shoppingmall}</p>
+				</a>
+			</li>
+			<li>
+					<a href="javascript:openLayer('该功能即将上线，敬请关注');">
+							<i class="iconfont icon"  style="color:#df6452;">&#xe619;</i>
+							<p>众筹</p>
+					</a>
+			</li>
+
+			<!-- 需要输出文字和链接 -->
+			<li>
+					<a href="javascript:openLayer('该功能即将上线，敬请关注');">
+						<i class="iconfont icon"  style="color:#478fdb;">&#xe62a;</i>
+						<p>体育赛事</p>
+					</a>
+			</li>
+			<li>
+					<a href="{:U('Index/exehange')}">
+						<i class="iconfont icon"  style="color:#478fdb;">&#xe607;</i>
+						<p>{$Think.lang.exchange}</p>
+					</a>
+			</li>
+		    <li>
+					<a href="{:U('User/Sharecode')}">
+						<i class="iconfont icon"  style="color:#df6452;">&#xe634;</i>
+						<p>{$Think.lang.share}</p>
+					</a>
+			</li>
+			<li>
+					<a href="{:U('User/Teamdets')}">
+						<i class="iconfont icon" style="color:#e69d43;">&#xe62f;</i>
+						<p>{$Think.lang.team}</p>
+					</a>
+			 </li>
+			 <!-- 需要输出文字和链接 -->
+			<li>
+					<a href="#" onclick="loginOut();">
+						<i class="iconfont icon"  style="color:#55a892;">&#xe634;</i>
+						<p>退出</p>
+					</a>
+			</li>
+		
+			
+			
+ 	 </ul>
+ </div>
+</div>
+<div class="footer-fan">
+	<a href="{:U('Index/index')}">
+		<img src="__WIMG__/index/shouye2.png" alt="首页">
+		<p>首页</p>
+	</a>
+	<!-- <a href="{:U('Turntable/index')}">
+		<img src="__WIMG__/index/zichan2.png" alt="资产">
+		<p>资产</p>
+	</a> -->
+	<a href="javascript:openLayer('该功能即将上线，敬请关注');">
+		<img src="__WIMG__/index/shangcheng2.png" alt="商城">
+		<p>商城</p>
+	</a>
+	<a href="{:U('User/Personal')}">
+		<img src="__WIMG__/index/wo2.png" alt="我的">
+		<p>我的</p>
+	</a>
+</div>
+<gt name="can_get" value="0">
+	<div class="big_width100" id="hide_none">
+		<div class="qindHB">
+			<div class="qindHB_nb">
+				<img src="__WIMG__/hongbaoyem.png?11" class="qinb_imga">
+				<a href="javascript:void(0);" id="hide">
+					<img src="__WIMG__/cunryue.png">
+				</a>
+				<div class="qiandHB_wz">
+					<h3><span  class="getnums">{$can_get|showtwo}</span></h3>
+					<p>天天签到红包不断</p>
+				</div>
+			</div>
+		</div>
+		<div class="qindHB_bg"></div>
+	</div>
+</gt>
+
+  <script type="text/javascript">
+
+
+           $(document).ready(function(){
+  
+/*      $(".xianzjiaoy").click(function(){
+         msg_alert("还未开启");
+        });
+      $(".quanxian").click(function(){
+         msg_alert("您无权限访问");
+        }); */
+
+    });
+  /*  $(".jinyong").click(function(){
+      alert("商城未开启");
+    })*/
+</script>
+
+<script type="text/javascript">
+      function scan(){
+          window.postMessage('saoyisao://pay');
+  		  //window.location.href="saoyisao://abcd";
+	  }
+    $("#hide").click(function(){
+        var yue = Number($('.yue').text());
+        var jifen = Number($('.jifen').text());
+		var getnums = Number($('.getnums').text());//可获得金额
+		var releasey = (yue + getnums).toFixed(2);
+		var releasej = (jifen - getnums).toFixed(2);;
+		$.ajax({
+			url:'Index/index',
+			type:'post',
+			data:{'getnums':getnums},
+			datatype:'json',
+			success:function (mes) {
+				if(mes.status == 1){
+                    //alert(mes.message);
+				    msg_alert(mes.message,mes.url);
+                    $("#hide_none").hide(1000);
+                    //加余额-减少积分
+                    $('.yue').text(releasey);
+                    $('.jifen').text(releasej);
+				}else{
+
+                    msg_alert(mes.message);
+                }
+            }
+		})
+    });
+</script>
+
+<script type="text/javascript">
+    var glide = $('.slider').glide({
+        //autoplay:true,//是否自动播放 默认值 true如果不需要就设置此值
+        animationTime:500, //动画过度效果，只有当浏览器支持CSS3的时候生效
+        arrows:false, //是否显示左右导航器
+        arrowsWrapperClass: "arrowsWrapper",//滑块箭头导航器外部DIV类名
+        arrowMainClass: "slider-arrow",//滑块箭头公共类名
+        arrowRightClass:"slider-arrow--right",//滑块右箭头类名
+        arrowLeftClass:"slider-arrow--left",//滑块左箭头类名
+        arrowRightText:">",//定义左右导航器文字或者符号也可以是类
+        arrowLeftText:"<",
+
+        nav:true, //主导航器也就是本例中显示的小方块
+        navCenter:true, //主导航器位置是否居中
+        navClass:"slider-nav",//主导航器外部div类名
+        navItemClass:"slider-nav__item", //本例中小方块的样式
+        navCurrentItemClass:"slider-nav__item--current" //被选中后的样式
+    });
+</script>
+
+<!--扫一扫调用-->
+<script>
+	function Dosaoyisao() {
+        qrcodeCallback();
+    }
+    function qrcodeCallback(result){
+		window.location.href=result;
+    }
+</script>
+
+<!-- 弹窗提示框 -->
+<script>
+
+	function openLayer(str){
+		console.log(str);
+		let s = new layermy(str).append();
+	}
+
+
+	function loginOut(){
+			new layermy('是否清空当前用户名/密码',function(s){
+				if(s == 1){
+					console.log("确认");
+					setCookie('userInfo','');
+					location.href = "{:U('User/Loginout')}";
+				}else{
+					location.href = "{:U('User/Loginout')}";
+				}
+			},true).append();
+			// setCookie('userInfo','');
+	}
+
+
+	
+</script>
+</body>
+
+</html>
