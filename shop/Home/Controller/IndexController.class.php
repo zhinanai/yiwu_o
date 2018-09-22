@@ -28,7 +28,7 @@ class IndexController extends CommonController
             $plant_num = M('store')->where(array('uid'=>$userid))->getField('plant_num');
             $total_wb =$huafei_total+$plant_num;//总资产
 
-            $Upay_price= D('coindets')->where("cid=1")->order('coin_addtime desc')->getField("coin_price");//金点子币的当前价格
+            $Upay_price= D('coindets')->where("cid=1")->order('coin_addtime desc')->getField("coin_price");//易物币的当前价格
 
             $wbgrade = M('store')->where(array('uid'=>$userid))->getField('vip_grade');
             $jingt=array(0.1,0.1,0.2,0.3);
