@@ -291,7 +291,7 @@ class GrowthController extends CommonController {
             $orders[$k]['cardnum'] = $bankinfos['card_number'];
             $orders[$k]['bname'] = M('bank_name')->where(array('q_id'=>$bankinfos['card_id']))->getfield('banq_genre');
             $orders[$k]['openrds'] = $bankinfos['open_card'];
-            $orders[$k]['uname'] = $uinfomsg['username'];
+            $orders[$k]['uname'] = $bankinfos['hold_name'];
             $orders[$k]['umobile'] = $uinfomsg['mobile'];
         }
         if(IS_AJAX){
