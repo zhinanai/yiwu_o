@@ -234,13 +234,14 @@
                         str += '<div class="sell_annal_ul_l">';
                         str += '<img src="__IMGHEAD__/' +val.img_head+ '" alt="" class="tuoux">';
                         str += '<div class="sell_annal_p">';
-                        str += '<p><span>'+val.username+'</span></p>';
-                        str += '<p>信用';
+                        str += '<p>昵称:&nbsp;&nbsp;<span>'+val.username+'</span></p>';
+                        str +='<p>UID：'+val.userid+'</p>'
+                        /*  str += '<p>信用';
 
-                        for (var i=0;i<=val.user_credit;i++)
-                        {
-                            str += '<span><img src="__WIMG__/aix-icon.png"></span>';
-                        }
+                          for (var i=0;i<=val.user_credit;i++)
+                          {
+                              str += '<span><img src="__WIMG__/aix-icon.png"></span>';
+                          }*/
                         // str += '<span><img src="__WIMG__/aix-icon.png"></span>';
                         // str += '<span><img src="__WIMG__/aix-icon.png"></span>';
                         // str += '<span><img src="__WIMG__/aix-icon.png"></span>';
@@ -253,10 +254,10 @@
                         str += '<p>实付金额：' +val.spay+ ' </p>';
                         str += '</div>';
                         str += '<div class="sell_chus">';
-                        // str += '<p>支付方式' +val.cardinfo+ '</p>';
+                        str += '<p>手机：' +val.mobile+ '</p>';
                         str += '</div>';
                         str += '<div class="sell_chusa">';
-                        str += '<a href="javascript:void(0)" onclick="Buyit(this)" data-id =' +val.id+'>卖出</a>';
+                        str += '<a href="javascirpt:void(0)" onclick="Buyit(this)" data-id =' +val.id+'>卖出</a>';
                         str += '</div></div>';
                         str += '</tr>';
                     });
