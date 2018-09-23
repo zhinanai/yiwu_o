@@ -68,7 +68,7 @@
 					<egt name="v['pay_state']" value = "1">
 							<div class="accordion-handle">
 								<h4>
-									<p class="accmrp">{$Think.lang.Buyamount}：{$v['pay_nums']}RMB<span class="acco_con_spana" ><eq name="v.pay_state" value="2">{$Think.lang.ydk}<else/>{$Think.lang.yxzskr}</eq></span></p>
+									<p class="accmrp">{$Think.lang.Buyamount}：{$v['pay_nums']}<span class="acco_con_spana" ><eq name="v.pay_state" value="2">{$Think.lang.ydk}<else/>{$Think.lang.yxzskr}</eq></span></p>
 									<p>{$v['pay_time']|date="Y-m-d H:i:s",###}<span>{$Think.lang.skr}：{$v['uname']}</span></p>
 								</h4>
 								<i></i>
@@ -90,14 +90,14 @@
 									<p>{$Think.lang.bankname}：<span>{$v['bname']}</span></p>
 									<p>{$Think.lang.cardnum}：<span>{$v['cardnum']}</span></p>
 									<p>{$Think.lang.openbranch}：<span>{$v['openrds']}</span></p>
-									<p>{$Think.lang.jyje}：<span>{$v['pay_nums']}RMB</span></p>
+									<p>{$Think.lang.jyje}：<span>{$v['pay_nums']}</span></p>
 									<p>{$Think.lang.zt}：<span class="acco_con_spana">{$Think.lang.yxzskr}</span></p>
 								</div>
 							</div>
 					<else />
 						<div class="accordion-handle">
 							<h4>
-								<p class="accmrp">{$Think.lang.Buyamount}：{$v['pay_nums']}RMB<span >{$Think.lang.wxzskr}</span></p>
+								<p class="accmrp">{$Think.lang.Buyamount}：{$v['pay_nums']}<span >{$Think.lang.wxzskr}</span></p>
 								<p>{$v['pay_time']|date="Y-m-d H:i:s",###}<span></span></p>
 							</h4>
 							<i></i>

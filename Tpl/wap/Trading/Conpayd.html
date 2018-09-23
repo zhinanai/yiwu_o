@@ -30,7 +30,7 @@
 			<div class="changeclass">
 				<div class="accordion-handle">
 					<h4>
-						<p class="accmrp">{$Think.lang.mcje}：{$v['pay_nums']}RMB<span class="acco_con_spana" ><eq name="v['pay_state']" value="2">{$Think.lang.confirm}<else />{$Think.lang.ysk}</eq></span></p>
+						<p class="accmrp">{$Think.lang.mcje}：{$v['pay_nums']}<span class="acco_con_spana" ><eq name="v['pay_state']" value="2">{$Think.lang.confirm}<else />{$Think.lang.ysk}</eq></span></p>
 						<p>{$v['pay_time']|date="Y-m-d H:i:s",###}<span>{$Think.lang.dkr}：{$v['uname']}</span></p>
 					</h4>
 					<i></i>
@@ -39,7 +39,7 @@
 					<div class="acco_con_up">
 						<p>{$Think.lang.dkrxm}：<span> {$v['uname']}</span></p>
 						<p>{$Think.lang.sjhm}：<span>{$v['umobile']}</span></p>
-						<p>{$Think.lang.jyje}：<span>{$v['pay_nums']}RMB</span></p>
+						<p>{$Think.lang.jyje}：<span>{$v['pay_nums']}</span></p>
 						<p>{$Think.lang.zt}：<span class="acco_con_spana"><eq name="v['pay_state']" value="2">{$Think.lang.confirm}<else />{$Think.lang.ysk}</eq></span></p>
 					</div>
 					<div class="acco_con_upa">
@@ -65,7 +65,7 @@
 		</notempty>
        <!--	<div class="accordion-handle">
         	<h4>
-        		<p class="accmrp">卖出金额：3000RMB<span class="acco_con_spana" >确认收款</span></p>
+        		<p class="accmrp">卖出金额：3000<span class="acco_con_spana" >确认收款</span></p>
         		<p>2018-03-15 20:33:24<span>打款人：张三</span></p>
         	</h4>
         	<i></i>
@@ -75,7 +75,7 @@
             	<p>打款人姓名：<span> 张三</span></p>
             	<p>手机号码：<span>13512341234</span></p>
 
-            	<p>交易金额：<span>3000.00RMB</span></p>
+            	<p>交易金额：<span>3000.00</span></p>
             	<p>状态：<span class="acco_con_spana">确认收款</span></p>
             </div>
             <div class="acco_con_upa">

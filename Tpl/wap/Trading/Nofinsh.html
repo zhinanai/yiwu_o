@@ -68,7 +68,7 @@
 					<egt name="v['pay_state']" value = "1">
 							<div class="accordion-handle">
 								<h4>
-							<p class="accmrp">挂出金额：{$v['pay_nums']}RMB<span class="acco_con_spana" ><eq name="v.pay_state" value="2">已打款<else/>已选择收款人</eq></span></p>
+							<p class="accmrp">挂出金额：{$v['pay_nums']}<span class="acco_con_spana" ><eq name="v.pay_state" value="2">已打款<else/>已选择收款人</eq></span></p>
 									<p>{$v['pay_time']|date="Y-m-d H:i:s",###}<span>打款人：{$v['uname']}</span></p>
 								</h4>
 								<i></i>
@@ -89,14 +89,14 @@
 								<div class="acco_con_up">
 									<p>打款人姓名：<span> {$v['uname']}</span></p>
 									<p>手机号码：<span>{$v['umobile']}</span></p>
-									<p>交易金额：<span>{$v['pay_nums']}RMB</span></p>
+									<p>交易金额：<span>{$v['pay_nums']}</span></p>
 									<p>状态：<span class="acco_con_spana">已选择打款人</span></p>
 								</div>
 							</div>
 					<else />
 						<div class="accordion-handle">
 							<h4>
-								<p class="accmrp">挂出金额：{$v['pay_nums']}RMB<span >未选择打款人</span></p>
+								<p class="accmrp">挂出金额：{$v['pay_nums']}<span >未选择打款人</span></p>
 								<p>{$v['pay_time']|date="Y-m-d H:i:s",###}<span></span></p>
 							</h4>
 							<i></i>
