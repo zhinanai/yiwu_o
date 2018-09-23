@@ -194,7 +194,7 @@ return array(
         'yxzskr'=>'已选择收款人',
         'mzdxgjl'=>'没找到相关记录',
         'buyaccount'=>'买入账号',
-        'Buyamount'=>'买入金额',
+        'Buyamount'=>'买入余额',
         'buytime'=>'买入时机',
         'salescenter'=>'卖出中心',
         'digitalasset'=>'数字资产',

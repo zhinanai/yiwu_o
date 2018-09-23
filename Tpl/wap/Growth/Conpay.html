@@ -31,7 +31,7 @@
             <div class="changeclass">
                 <div class="accordion-handle">
                     <h4>
-                        <p class="accmrp">{$Think.lang.Buyamount}：{$v['pay_nums']}RMB<span class="acco_con_spana"><if
+                        <p class="accmrp">{$Think.lang.Buyamount}：{$v['pay_nums']}<span class="acco_con_spana"><if
                                 condition="$v['pay_state'] == 1">{$Think.lang.qrdk}
 							<elseif condition="$v['pay_state'] == 2"/>
 							{$Think.lang.ydk}
@@ -49,7 +49,7 @@
                         <p>{$Think.lang.bankname}：<span>{$v['bname']}</span></p>
                         <p>{$Think.lang.cardnum}：<span>{$v['cardnum']}</span></p>
                         <p>{$Think.lang.openbranch}：<span>{$v['openrds']}</span></p>
-                        <p>{$Think.lang.jyje}：<span>{$v['pay_nums']}RMB</span></p>
+                        <p>{$Think.lang.jyje}：<span><php>echo $v['pay_nums']*0.85;</php></span></p>
                         <p>{$Think.lang.zt}：<span class="acco_con_spana">
 						<if condition="$v['pay_state'] == 1">{$Think.lang.qrdk}
 							<elseif condition="$v['pay_state'] == 2"/>
