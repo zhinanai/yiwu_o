@@ -153,7 +153,7 @@
                                                                 <a name="forbid" title="解锁" class="<php>if(!in_array(3,$hylb)) echo "bky";</php>   label label-success-outline label-pill ajax-get confirm" href="{:U('User/setStatus',array('status'=>resume,'ids'=>$data['userid'],'model'=>'User'))}">解锁</a>
                                                                 </eq>
                                                                 <a name="findUserAmount" title="查看流水" class="label label-warning-outline label-pill" href="{:U('user/tranMoney',['uid'=>$data['userid']])}" target="_blank">查看用户流水</a>
-
+                                                                <a name="check_app" title="维护期间可登陆" class="label label-danger-outline label-pill" href="{:U('user/checkApp',['uid'=>$data['userid']])}" target="_blank">维护期间可登陆</a>
                                                                 <div style="height:10px" ></div>
 
                                                                  <a name="edit" title="修改财富" class="<php>if(!in_array(2,$hylb)) echo "bky";</php>   label label-primary-outline label-pill" href="{:U('User/AddFruits',array('id'=>$data['userid']))}">财富</a>

@@ -611,4 +611,17 @@ class UserController extends AdminController
             $this->display();
         }
     }
+    /*
+     * 维护期间可登陆标记
+     * */
+    public function checkApp(){
+        if(IS_GET){
+            $uid=I("uid");
+            if(is_numeric($uid)){
+                $userInfo=D("user")->where(['userid'=>$uid])->field("check_app")->find();
+                return D("user")->where(['userid'=>$uid])->save(['check_app'=>$userInfo['check_app'] ? 0 :1])
+                    ? $this->success($userInfo['check_app'] ? "标记为不能登陆成功":"标记为可以登陆") : $this->error("修改失败");
+            }
+        }
+    }
 }
