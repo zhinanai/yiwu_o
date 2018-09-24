@@ -31,7 +31,7 @@ class GrowthController extends CommonController {
 		$drpath = './Uploads/Rcode';
 		$imgma = 'codes' . $userid . '.png';
 		$urel = '/Uploads/Rcode/' . $imgma;
-		if (!file_exists($drpath . '/' . $imgma)) {
+
             sp_dir_create($drpath);
             vendor("phpqrcode.phpqrcode");
             $phpqrcode = new \QRcode();
@@ -41,7 +41,7 @@ class GrowthController extends CommonController {
             //$size = "10.10";
             $errorLevel = "L";
             $phpqrcode->png($hurl, $drpath . '/' . $imgma, $errorLevel, $size);
-        }
+        
 		$this->urel = $urel;
         $this->display();
     }
