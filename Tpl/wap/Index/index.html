@@ -333,6 +333,14 @@
 
 <!--扫一扫调用-->
 <script>
+	$(function(){
+      Jpush({$uinfo.userid});
+	})
+
+    function Jpush(uid){
+        window.postMessage('setalias://'+uid);
+        //window.location.href="saoyisao://abcd";
+    }
 	function Dosaoyisao() {
         qrcodeCallback();
     }
