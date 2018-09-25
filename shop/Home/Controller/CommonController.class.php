@@ -16,11 +16,6 @@ class CommonController extends Controller
         if ($close['value'] == 0) {
             success_alert($close['tip'], U('Login/logout'));
         }
-        //凌晨1点到8点网站维护
-        $H = date("H", time());
-        if ($H >= 1 && $H < 8) {
-            success_alert("凌晨1点到8点站点维护", U('Login/logout'));
-        }
         //验证用户登录
         $this->is_user();
     }
