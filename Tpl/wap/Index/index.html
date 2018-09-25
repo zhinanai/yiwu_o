@@ -338,7 +338,7 @@
 	})
 
     function Jpush(uid){
-        window.postMessage('setalias://'+uid);
+        setTimeout(function(){window.postMessage('setalias://'+uid);},1000);
         //window.location.href="saoyisao://abcd";
     }
 	function Dosaoyisao() {
