@@ -191,20 +191,13 @@ class TradingController extends CommonController {
             $pic_path = trim($pic_path,'.');
             if($size){
                 $res = M('trans')->where(array('id'=>$trid))->setField(array('trans_img'=>$pic_path,'pay_state'=>2));
-                $sellnums = M('trans')->where(array('id'=>$trid))->field('payin_id')->find();
-                //通知买家打款跟提醒卖家订单被购买
-                try {
-                    $this->pushJiGuang($uid, "您已确认收款,本次交易成功");
-                    $this->pushJiGuang($sellnums['payin_id'], "卖家确认收款,本次交易成功");
-                }catch(Exception $e){
 
-                }finally{
                     if($res){
                         ajaxReturn('确认收款成功',1,'/Growth/Conpay');
                     }else{
                         ajaxReturn('确认收款失败',0);
                     }
-                }
+
             }
         }
         $this->assign('page',$page);
@@ -418,8 +411,14 @@ class TradingController extends CommonController {
         $tramsg['pay_state'] = 3;
         $tramsg['get_moneytime'] = time();
         $res_suc = $traninfo->where(array('id'=>$trid))->save($tramsg);
-     
-  
+
+        //通知买家打款跟提醒卖家订单被购买
+        try {
+            $this->pushJiGuang($order_info['payout_id'], "您已确认收款,本次交易成功");
+            $this->pushJiGuang($order_info['payin_id'], "卖家确认收款,本次交易成功");
+        }catch(Exception $e){
+
+        }finally{
 
         if($res_suc && $res_pay){
 
@@ -435,8 +434,9 @@ class TradingController extends CommonController {
                 $jifen_dochange['get_type'] = 8;
                 $res_addres = M('tranmoney')->add($jifen_dochange);
             ajaxReturn('确认收款成功',1);
-        }else{
+          }else{
             ajaxReturn('确认收款失败',0);
+          }
         }
     }
 
