@@ -1,0 +1,29 @@
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":"all","notification":{"alert":"Hello, JPush"},"options":{"sendno":88628,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":"all","notification":{"alert":"Hello, JPush"},"options":{"sendno":73125,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":"all","notification":{"alert":"Hello, JPush"},"options":{"sendno":55246,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":"all","notification":{"alert":"Hello, JPush"},"options":{"sendno":86420,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":"all","notification":{"alert":"Hello, JPush"},"options":{"sendno":68149,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":"all","notification":{"alert":"Hello, JPush"},"options":{"sendno":94494,"apns_production":false}}, times:1
+Send GET https://api.jpush.cn/v3/push/cid?count=1&type=push, body:null, times:1
+Send GET https://api.jpush.cn/v3/push/cid?count=1&type=push, body:null, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10645"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":50748,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10646"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":37137,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10646"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":34297,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":["android"],"audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":78238,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":37077,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":59378,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":76368,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":62901,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":98107,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":55906,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":84071,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":53042,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":72568,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["664895"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":95148,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10646"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":73020,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10646"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":53795,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10646"]},"notification":{"alert":"Hello, JPush"},"options":{"sendno":37762,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10645"]},"notification":{"alert":"\u8ba2\u5355\u5df2\u7ecf\u8d2d\u4e70\u9501\u5b9a\u8bf7\u53ca\u65f6\u5728\u4e70\u5bb6\u4e2d\u5fc3\u6267\u884c\u8f6c\u8d26\u64cd\u4f5c"},"options":{"sendno":75878,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10646"]},"notification":{"alert":"\u60a8\u7684\u8ba2\u5355\u5df2\u7ecf\u88ab\u8d2d\u4e70,\u7b49\u5f85\u5356\u5bb6\u4ed8\u6b3e\u4e2d"},"options":{"sendno":98281,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10645"]},"notification":{"alert":"\u8ba2\u5355\u5df2\u7ecf\u8d2d\u4e70\u9501\u5b9a\u8bf7\u53ca\u65f6\u5728\u786e\u8ba4\u6253\u6b3e\u6267\u884c\u8f6c\u8d26\u64cd\u4f5c"},"options":{"sendno":51544,"apns_production":false}}, times:1
+Send POST https://api.jpush.cn/v3/push, body:{"platform":"all","audience":{"alias":["10645"]},"notification":{"alert":"\u8ba2\u5355\u5df2\u7ecf\u8d2d\u4e70\u9501\u5b9a\u8bf7\u53ca\u65f6\u5728\u786e\u8ba4\u6253\u6b3e\u6267\u884c\u8f6c\u8d26\u64cd\u4f5c"},"options":{"sendno":49936,"apns_production":false}}, times:1

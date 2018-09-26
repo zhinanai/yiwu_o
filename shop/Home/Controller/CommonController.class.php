@@ -5,6 +5,10 @@
 
 namespace Home\Controller;
 
+use Org\JpushApi\src\Exceptions\JPush\JPushException;
+use Org\JpushApi\src\JPush\Client;
+use Org\JpushApi\src\JPush\PushPayload;
+use Org\JpushApi\src\JPush\Test;
 use Think\Controller;
 
 class CommonController extends Controller
@@ -69,6 +73,37 @@ class CommonController extends Controller
         //记录操作时间
         // session('in_time',time());
     }
+
+    /*
+    * 极光推送
+     * @param $alias  obj 别名
+     * @param $platFrom obj 发送平台(all|所有,ios|苹果,android|安卓)
+     * @param $content obj  内容体
+    * */
+    public function pushJiGuang($alias,$content,$platFrom='all'){
+
+        $client=new Client("8b0eb871818034d3456f8a3d","349d3e20b396ef18c0c52115");
+
+     if($alias){
+         $pusher = $client->push()
+             ->addAlias($alias)
+             ->setPlatform($platFrom)
+             ->setNotificationAlert($content);
+     }else{
+         $pusher = $client->push()
+             ->setPlatform($platFrom)
+             ->setNotificationAlert($content);
+     }
+
+        try {
+           $pusher->send();
+        } catch (JPushException $e) {
+            // try something else here
+            print $e;
+        }
+    }
+
+
 
 
 }

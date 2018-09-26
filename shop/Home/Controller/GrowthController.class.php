@@ -1,6 +1,8 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Think\Exception;
+
 class GrowthController extends CommonController {
 
 
@@ -442,10 +444,18 @@ class GrowthController extends CommonController {
             $user_info = $user_object->Trans($minepwd['account'], $pwd);
             //记录买入会员
             $res_Buy = M('trans')->where(array('id'=>$trid))->setField(array('payin_id'=>$uid,'pay_state'=>1));
-            if($res_Buy){
+            //通知买家打款跟提醒卖家订单被购买
+            try {
+                $this->pushJiGuang($uid, "订单已经购买锁定请及时在确认打款执行转账操作");
+                $this->pushJiGuang($sellnums['payout_id'], "您的订单已经被购买,等待卖家付款中");
+            }catch(Exception $e){
 
-                ajaxReturn('买入成功',1);
+            }finally{
+                if($res_Buy){
+                    ajaxReturn('买入成功',1);
+                }
             }
+
         }
         $this->display();
     }
