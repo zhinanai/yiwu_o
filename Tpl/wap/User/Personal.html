@@ -43,9 +43,8 @@
     <div class="user-top">
        <div class="user-head" id="logox"><img id="bgl" src="__IMGHEAD__/{$uinfo['img_head']}"/></div>
        <ul class="user-top-msg">
-           <li>等级:<if condition="$uinfo['jifenNum'] lt 1000000 ">普通用户
-			<else /> VIP
-			</if></li>
+		   <li>等级:<php>if($jifenNum<1000000){echo "普通用户";}else{echo "VIP";}</php>
+			</li>
            <li>UID:{$uinfo['userid']}</li>
            <li><a href="#" onclick="loginOut();">{$Think.lang.loginout}</a></li>
        </ul>
