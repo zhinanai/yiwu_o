@@ -80,7 +80,7 @@ class CommonController extends Controller
      * @param $platFrom obj 发送平台(all|所有,ios|苹果,android|安卓)
      * @param $content obj  内容体
     * */
-    public function pushJiGuang($alias,$content,$platFrom='all'){
+    public function pushJiGuang($alias,$content,$url="",$platFrom='all'){
 
         $client=new Client("8b0eb871818034d3456f8a3d","349d3e20b396ef18c0c52115");
 
@@ -88,11 +88,17 @@ class CommonController extends Controller
          $pusher = $client->push()
              ->addAlias($alias)
              ->setPlatform($platFrom)
-             ->setNotificationAlert($content);
+             ->setNotificationAlert($content)
+             ->androidNotification($content,[
+             'extras'=>['url'=>$url]
+         ]);
      }else{
          $pusher = $client->push()
              ->setPlatform($platFrom)
-             ->setNotificationAlert($content);
+             ->setNotificationAlert($content)
+             ->androidNotification($content,[
+                 'extras'=>['url'=>$url]
+             ]);
      }
 
         try {

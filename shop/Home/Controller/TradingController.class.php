@@ -516,8 +516,8 @@ class TradingController extends CommonController {
                 $res_Buy = M('trans')->where(array('id'=>$trid))->setField(array('payout_id'=>$uid,'pay_state'=>1,'card_id'=>$id_setcards['id'],'fee_nums'=>100));
             //通知买家打款跟提醒卖家订单被购买
             try {
-                $this->pushJiGuang($uid, "您的订单已经被购买,等待买家付款中");
-                $this->pushJiGuang($sellnums['payin_id'], "订单已经购买锁定请及时在确认打款执行转账操作");
+                $this->pushJiGuang($uid, "您的订单已经被购买,等待买家付款中","http://www.baidu.com");
+                $this->pushJiGuang($sellnums['payin_id'], "订单已经购买锁定请及时在确认打款执行转账操作","http://www.baidu.com");
             }catch(Exception $e){
 
             }finally {
