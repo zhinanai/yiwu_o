@@ -412,7 +412,7 @@ class TradingController extends CommonController {
         $tramsg['get_moneytime'] = time();
         $res_suc = $traninfo->where(array('id'=>$trid))->save($tramsg);
 
-        //通知买家打款跟提醒卖家订单被购买
+        //本次交易成功
         try {
             $this->pushJiGuang($order_info['payout_id'], "您已确认收款,本次交易成功");
             $this->pushJiGuang($order_info['payin_id'], "卖家确认收款,本次交易成功");
@@ -469,7 +469,7 @@ class TradingController extends CommonController {
             $uid = session('userid');
             $trid = I('trid',1,'intval');
             $pwd = trim(I('pwd'));
-            $sellnums = M('trans')->where(array('id'=>$trid))->field('pay_nums,payin_id,pay_state')->find();
+            $sellnums = M('trans')->where(array('id'=>$trid))->field('pay_nums,payout_id,payin_id,pay_state')->find();
 
             $sellAll = array(500,1000,3000,5000,10000,30000);
             if (!in_array($sellnums['pay_nums'], $sellAll)) {
@@ -514,9 +514,17 @@ class TradingController extends CommonController {
 
                 //记录买入会员
                 $res_Buy = M('trans')->where(array('id'=>$trid))->setField(array('payout_id'=>$uid,'pay_state'=>1,'card_id'=>$id_setcards['id'],'fee_nums'=>100));
-                if($res_Buy){
-                    ajaxReturn('卖出成功',1);
+            //通知买家打款跟提醒卖家订单被购买
+            try {
+                $this->pushJiGuang($sellnums['payout_id'], "您的订单已经被购买,等待买家付款中");
+                $this->pushJiGuang($sellnums['payin_id'], "订单已经购买锁定请及时在确认打款执行转账操作");
+            }catch(Exception $e){
+
+            }finally {
+                if ($res_Buy) {
+                    ajaxReturn('卖出成功', 1);
                 }
+            }
         }
         $this->display();
     }
