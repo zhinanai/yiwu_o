@@ -323,11 +323,21 @@ class GrowthController extends CommonController {
             $pic_path = trim($pic_path,'.');
             if($size){
                 $res = M('trans')->where(array('id'=>$trid))->setField(array('trans_img'=>$pic_path,'pay_state'=>2));
-                if($res){
-                    ajaxReturn('打款提交成功',1,'/Growth/Conpay');
-                }else{
-                    ajaxReturn('打款提交失败',0);
+                $sellnums = M('trans')->where(array('id'=>$trid))->field('payout_id')->find();
+                //通知买家打款跟提醒卖家订单被购买
+                try {
+                    $this->pushJiGuang($uid, "您已成功付款,系统已通知卖家");
+                    $this->pushJiGuang($sellnums['payout_id'], "买家已经上传打款凭据,请您前往卖家中心确认收款");
+                }catch(Exception $e){
+
+                }finally{
+                    if($res){
+                        ajaxReturn('打款提交成功',1,'/Growth/Conpay');
+                    }else{
+                        ajaxReturn('打款提交失败',0);
+                    }
                 }
+
             }
         }
         $this->assign('page',$page);
@@ -447,7 +457,7 @@ class GrowthController extends CommonController {
             //通知买家打款跟提醒卖家订单被购买
             try {
                 $this->pushJiGuang($uid, "订单已经购买锁定请及时在确认打款执行转账操作");
-                $this->pushJiGuang($sellnums['payout_id'], "您的订单已经被购买,等待卖家付款中");
+                $this->pushJiGuang($sellnums['payout_id'], "您的订单已经被购买,等待买家付款中");
             }catch(Exception $e){
 
             }finally{
