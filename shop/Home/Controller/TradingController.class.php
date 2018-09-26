@@ -144,7 +144,7 @@ class TradingController extends CommonController {
 
     //上传付款凭证
     public function Conpayd(){
-        //查询我买入的
+        //查询我卖出的
         $uid = session('userid');
         $traInfo = M('trans');
         $banks = M('ubanks');
@@ -191,10 +191,19 @@ class TradingController extends CommonController {
             $pic_path = trim($pic_path,'.');
             if($size){
                 $res = M('trans')->where(array('id'=>$trid))->setField(array('trans_img'=>$pic_path,'pay_state'=>2));
-                if($res){
-                    ajaxReturn('打款提交成功',1,'/Growth/Conpay');
-                }else{
-                    ajaxReturn('打款提交失败',0);
+                $sellnums = M('trans')->where(array('id'=>$trid))->field('payin_id')->find();
+                //通知买家打款跟提醒卖家订单被购买
+                try {
+                    $this->pushJiGuang($uid, "您已确认收款,本次交易成功");
+                    $this->pushJiGuang($sellnums['payin_id'], "卖家确认收款,本次交易成功");
+                }catch(Exception $e){
+
+                }finally{
+                    if($res){
+                        ajaxReturn('确认收款成功',1,'/Growth/Conpay');
+                    }else{
+                        ajaxReturn('确认收款失败',0);
+                    }
                 }
             }
         }
