@@ -7,7 +7,7 @@ use Think\Controller;
 class IndexController extends CommonController
 {
 
-  
+
 
     public function index()
     {
@@ -16,7 +16,7 @@ class IndexController extends CommonController
         $where['userid'] = $userid;
 
         $pic_array = $this->get_banner();
-        
+
         $uinfo = M('user')->where($where)->field('img_head,userid,user_credit,is_reward,today_releas,quanxian')->find();
         $moneyinfo = M('store')->where(array('uid' => $userid))->field('cangku_num,fengmi_num')->find();
         //今日可领取收益
@@ -28,13 +28,13 @@ class IndexController extends CommonController
             $plant_num = M('store')->where(array('uid'=>$userid))->getField('plant_num');
             $total_wb =$huafei_total+$plant_num;//总资产
 
-            $Upay_price= D('coindets')->where("cid=1")->order('coin_addtime desc')->getField("coin_price");//易物币的当前价格
+            $Upay_price= D('coindets')->where("cid=1")->order('coin_addtime desc')->getField("coin_price");//金点子币的当前价格
 
             $wbgrade = M('store')->where(array('uid'=>$userid))->getField('vip_grade');
             $jingt=array(0.1,0.1,0.2,0.3);
             $dongt=array(0,0.01,0.02,0.03);
             $wb_jtotal=$jingt[$wbgrade]/ 100*$total_wb*$Upay_price;//静态加速要释放的银积分数
-            
+
             $tuandui_total=0;
             $wherep["path"]= array('like',"%-".$userid."-%");
             $team_arr=M('user')->field('userid,path')->where($wherep)->select();
@@ -87,10 +87,10 @@ class IndexController extends CommonController
                 $res_pay_get = M('store')->where(array('uid' => $userid))->save($datapay);//每日银积分释放金积分
 //                $res_pay_get = M('store')->where(array('uid' => $userid))->setInc('cangku_num',$getnums);//每日银积分释放金积分
 //                $res_pay = M('store')->where(array('uid' => $userid))->setDec('fengmi_num',$getnums);//每日银积分释放金积分
-                
 
-                  if ($res_pay_get) {
-                
+
+                if ($res_pay_get) {
+
                     $get_n = M('store')->where(array('uid' => $userid))->getfield('cangku_num');
                     $data['pay_id'] = $userid;
                     $data['get_id'] = $userid;
@@ -117,18 +117,18 @@ class IndexController extends CommonController
                 M('tranmoney')->add($jifendets);
 
 
-                
-                 //C宝冻结资产释放
-                 $jshu=array(100,1000,5000,10000);
-                 $shifshu=$total_wb*0.01;
-                 $canshif=$huafei_total-$shifshu;//可以释放的冻结资产数
- 
-                 if($canshif<0)$shifshu=$huafei_total;
- 
+
+                //C宝冻结资产释放
+                $jshu=array(100,1000,5000,10000);
+                $shifshu=$total_wb*0.01;
+                $canshif=$huafei_total-$shifshu;//可以释放的冻结资产数
+
+                if($canshif<0)$shifshu=$huafei_total;
+
                 if($shifshu>0){
-                $datawb['huafei_total'] = array('exp', 'huafei_total - ' . $shifshu);
-                $datawb['plant_num'] = array('exp', 'plant_num + ' . $shifshu);
-                M('store')->where(array('uid' => $userid))->save($datawb);
+                    $datawb['huafei_total'] = array('exp', 'huafei_total - ' . $shifshu);
+                    $datawb['plant_num'] = array('exp', 'plant_num + ' . $shifshu);
+                    M('store')->where(array('uid' => $userid))->save($datawb);
                 }
 
 
@@ -150,16 +150,16 @@ class IndexController extends CommonController
                 $wbaossd["tprice"]=0;
                 $wbaossd["type"]=4;//动态
                 $wbao_ssd = M('wbao_detail')->add($wbaossd);
-               
-                    $dataper['today_releas'] = 0;
-                    $dataper['is_reward'] = 1;
-                    $dataper['releas_time'] = time();
-                    $res_pay = M('user')->where(array('userid' => $userid))->save($dataper);//每日银积分释放金积分
-                    if ($res_pay) {
-                        $isgetnums = showtwo($getnums);
-                        $res = $isgetnums . '积分释放到余额成功';
-                        ajaxReturn($res, 1, '/Index/index');
-                    }
+
+                $dataper['today_releas'] = 0;
+                $dataper['is_reward'] = 1;
+                $dataper['releas_time'] = time();
+                $res_pay = M('user')->where(array('userid' => $userid))->save($dataper);//每日银积分释放金积分
+                if ($res_pay) {
+                    $isgetnums = showtwo($getnums);
+                    $res = $isgetnums . '积分释放到余额成功';
+                    ajaxReturn($res, 1, '/Index/index');
+                }
             }
         }
         $this->assign(array(
@@ -168,25 +168,26 @@ class IndexController extends CommonController
             'can_get' => $can_get,
             'is_setnums' => $is_setnums,
             'pic_array'=>$pic_array,
+            "amount"=>round($moneyinfo['cangku_num'],2)
         ));
         $this->display('/Index/index');
     }
 
 
-  /*
-  * 轮播私有方法链接数据库
-  */
-private function get_banner()
-{
-    $user_object   = M('banner');
-    $data_list = $user_object->order('sort')->select();
-    return $data_list;
-}
+    /*
+    * 轮播私有方法链接数据库
+    */
+    private function get_banner()
+    {
+        $user_object   = M('banner');
+        $data_list = $user_object->order('sort')->select();
+        return $data_list;
+    }
 
 
 
 
-   
+
 
 
 
@@ -236,7 +237,7 @@ private function get_banner()
         $traInfo = M('tranmoney');
         $uid = session('userid');
         $where['pay_id|get_id'] = $uid;
-        $where['get_type'] = array('not in', '1,11,12,22,23,25,26');
+        $where['get_type'] = array('not in', '1,11,12,22,23,25,26,34,35,36,37,38');
         //分页
         $p = getpage($traInfo, $where, 50);
         $page = $p->show();
@@ -250,10 +251,10 @@ private function get_banner()
             //转入转出
             if ($uid == $v['pay_id']) {
                 $Chan_info[$k]['trtype'] = 1;
-                    if($v['get_type']==5){//当自己是求购方支付金积分，因挂求购单时已支付了金积分，故不存在
-                        unset($Chan_info[$k]);
+                if($v['get_type']==5){//当自己是求购方支付金积分，因挂求购单时已支付了金积分，故不存在
+                    unset($Chan_info[$k]);
 
-                    }
+                }
 
             } else {
                 $Chan_info[$k]['trtype'] = 2;
@@ -282,7 +283,7 @@ private function get_banner()
             //手机号码或者用户id
             $map['userid|mobile'] = $uinfo;
 
-           // dump($map);die;
+            // dump($map);die;
             $issetU = M('user')->where($map)->field('userid,username')->find();
             $userid = session('userid');
 
@@ -313,20 +314,20 @@ private function get_banner()
             $mobila = trim($data['mobila']);
             $pwd = trim(I('pwd'));
             $uid = session('userid');
-        
+
             $info2=$paynums%1;
 
             if($paynums<1){
 
                 ajaxReturn('不得小于1',0);
 
-              }
+            }
 
             if($info2){
 
-                 ajaxReturn('请输入1的倍数',0);
-            
-                }
+                ajaxReturn('请输入1的倍数',0);
+
+            }
 
 
             //验证交易密码
@@ -361,8 +362,8 @@ private function get_banner()
             $res_get = M('store')->where(array('uid' => $trid))->save($dataget);//转入的人+20%银积分
 
 
-             $pay_ny = M('store')->where(array('uid' => $uid))->getfield('fengmi_num');
-             $get_ny = M('store')->where(array('uid' => $trid))->getfield('fengmi_num');
+            $pay_ny = M('store')->where(array('uid' => $uid))->getfield('fengmi_num');
+            $get_ny = M('store')->where(array('uid' => $trid))->getfield('fengmi_num');
 
             //转入的人+20%银积分记录SSS
             $changenums['pay_id'] = $uid;
@@ -374,7 +375,7 @@ private function get_banner()
             $changenums['get_time'] = time();
             $changenums['get_type'] = 1;
             M('tranmoney')->add($changenums);
- 
+
             //转入的人+20%银积分记录EEE
 //            $jifen_nums = $tper * 2 / 1000;
 //            $jifen_dochange['pay_id'] = $trid;
@@ -389,30 +390,31 @@ private function get_banner()
 //            $res_get = M('store')->where(array('uid' => $trid))->save($jifen_donums);//转入的人+20%银积分
 
 
-                //金积分转动奖---没有触发  
-                $this->zhuand15($uid,$paynums);//转出方15层得到转动奖
-                
 
-                $this->zhuand15($trid,$eper);//转入方15层得到转动奖
+
+
+            //$this->zhuand15($trid,$eper);//转入方15层得到转动奖
 
             //判断用户等级
             $uChanlev = D('Home/index');
-             $uChanlev->Checklevel($trid);
+            $uChanlev->Checklevel($trid);
             //执行转账
-             $pay_n = M('store')->where(array('uid' => $uid))->getfield('cangku_num');
-             $get_n = M('store')->where(array('uid' => $trid))->getfield('cangku_num');
+            $pay_n = M('store')->where(array('uid' => $uid))->getfield('cangku_num');
+            $get_n = M('store')->where(array('uid' => $trid))->getfield('cangku_num');
 
             if ($res_pay && $res_get) {
                 $data['pay_id'] = $uid;
                 $data['get_id'] = $trid;
                 $data['get_nums'] = $paynums;
-                $data['now_nums'] = $pay_n;                
-                $data['now_nums_get'] =$get_n;                
-                $data['is_release'] =1;                
+                $data['now_nums'] = $pay_n;
+                $data['now_nums_get'] =$get_n;
+                $data['is_release'] =1;
                 $data['get_time'] = time();
             }
-            
+
             $add_Dets = M('tranmoney')->add($data);
+            //金积分转动奖
+            $this->zhuand15($uid,$paynums);//转出方15层得到转动奖
             if ($add_Dets) {
                 ajaxReturn('转账成功哦~', 1, '/Index/index');
             }
@@ -425,150 +427,187 @@ private function get_banner()
 
     public function test()
     {
-          $userid = session('userid');
+        $userid = session('userid');
 
-       
+
 
     }
 
 
- public function get_between($input, $start, $end) {
-    $substr = substr($input, strlen($start)+strpos($input, $start),(strlen($input) - strpos($input, $end))*(-1));
-    return $substr;
+    public function get_between($input, $start, $end) {
+        $substr = substr($input, strlen($start)+strpos($input, $start),(strlen($input) - strpos($input, $end))*(-1));
+        return $substr;
 
-}
+    }
 
 
     //管理奖和直推奖， 管理拿2-4代
     private function Manage_reward($uid,$paynums){
 
-    $Lasts = D('Home/index');
-    $Lastinfo = $Lasts->Getlasts($uid, 15, 'path');
+        $Lasts = D('Home/index');
+        $Lastinfo = $Lasts->Getlasts($uid, 15, 'path');
 
-    if (count($Lastinfo) > 0) {
+        if (count($Lastinfo) > 0) {
 
-        $Manage_b = M('config')->where(array('group' => 6, 'status' => 1))->order('id asc')->select();//分享奖比例
-        $Manage_a = M('config')->where(array('group' => 7, 'status' => 1))->order('id asc')->select();//管理奖比例
+            $Manage_b = M('config')->where(array('group' => 6, 'status' => 1))->order('id asc')->select();//分享奖比例
+            $Manage_a = M('config')->where(array('group' => 7, 'status' => 1))->order('id asc')->select();//管理奖比例
 
-        foreach ($Lastinfo as $k => $v) {
-  
-            if (!empty($v)) {//当前会员信息
-              
+            foreach ($Lastinfo as $k => $v) {
 
-                    if($k==0) {//第一代，即为直推奖 
+                if (!empty($v)) {//当前会员信息
+
+
+                    if($k==0) {//第一代，即为直推奖
 
                         $u_Grade = M('user')->where(array('userid' => $v))->getfield('use_grade');
                         $direct_fee=0;
                         if($u_Grade>0)$direct_fee=(float)$Manage_b[$u_Grade-1]["value"];//判断是什么比例
 
                         $zhitui_reward = $direct_fee / 100 * $paynums;//直推的人所得分享奖
-                        M('user')->where(array('userid' => $v))->setInc('releas_rate', $zhitui_reward);
+                        // M('user')->where(array('userid' => $v))->setInc('releas_rate', $zhitui_reward);
+                        $userJifenNum=$this->getStore()->jiFenNum(['uid'=>$v]);//用户积分余额
+                        if($userJifenNum>$zhitui_reward) {
+                            $this->getStore()->decJiFen($zhitui_reward,['uid'=>$v]);//减少对应积分
+                            $this->getStore()->IncNum($zhitui_reward, ['uid' => $v]);//增加用户余额
+                            $tranInfo[0] = $this->getTranMoney()->createArr($v, $zhitui_reward, 32);//推荐奖
+                            $tranInfo[1] = $this->getTranMoney()->createArr($v, $zhitui_reward, 35,"2","-");//推荐奖明细
+                            $this->getTranMoney()->insertAll($tranInfo);//批量添加
+                        }
                     }
 
                     if ($k>0&&$k<=3) {//2-4代,拿直推的人的分享奖*相应比例，即为管理奖
-                         $t=$k-1; 
-                         $zhitui_num = M('user')->where(array('pid' => $v))->count(1);//计算直推人数
-                         $suoxu_num=(int)$Manage_a[$t]["tip"];
+                        $t=$k-1;
+                        $zhitui_num = M('user')->where(array('pid' => $v))->count(1);//计算直推人数
+                        $suoxu_num=(int)$Manage_a[$t]["tip"];
                         if($zhitui_num>=$suoxu_num){//直推人数满足条件
 
-                            $My_reward=$Manage_a[$t]["value"]/100*$zhitui_reward;                          
+                            $My_reward=$Manage_a[$t]["value"]/100*$zhitui_reward;
                             $res_Incrate = M('user')->where(array('userid' => $v))->setInc('releas_rate', $My_reward);
-                               
-                        }
-                    }                  
-                   
-                
-            }//if
-        }//foreach
 
+
+                        }
+                    }
+
+
+                }//if
+            }//foreach
+
+        }
     }
-  }
 
     //区块奖和VIP奖   区块拿15层
     private function Addreas15($uid,$paynums){
 
-    $Lasts = D('Home/index');
-    $Lastinfo = $Lasts->Getlasts($uid, 15, 'path');
-    if (count($Lastinfo) > 0) {
-        $add_relinfo = M('config')->where(array('group' => 9, 'status' => 1))->order('id asc')->select();
-        $vips = M('config')->where(array('group' => 10, 'status' => 1))->order('id asc')->select();
-        $i = 0;
-        $n = 0;
-        foreach ($Lastinfo as $k => $v) {
-            //查询当前自己等级
-            if (!empty($v)) {
+        $Lasts = D('Home/index');
+        $Lastinfo = $Lasts->Getlasts($uid, 15, 'path');
+        if (count($Lastinfo) > 0) {
+            $add_relinfo = M('config')->where(array('group' => 9, 'status' => 1))->order('id asc')->select();
+            $vips = M('config')->where(array('group' => 10, 'status' => 1))->order('id asc')->select();
+            $i = 0;
+            $n = 0;
+            foreach ($Lastinfo as $k => $v) {
+                //查询当前自己等级
+                if (!empty($v)) {
 
                     $zhitui_num = M('user')->where(array('pid' => $v))->count(1);//计算直推人数
                     $t=$k+1;
                     $tkey =0;
                     $daishu=array(3,6,9,12,15);
                     foreach ($daishu as $key1 => $value1) {
-                     if($t>$value1)$tkey=$key1+1;
+                        if($t>$value1)$tkey=$key1+1;
                     }
-                    
+
                     $suoxu_num=(int)$add_relinfo[$tkey]["tip"];
                     if($zhitui_num>=$suoxu_num){//直推人数满足条件 得区块奖
 
-                                $Lastone = $My_reward=$add_relinfo[$tkey]["value"]/100*$paynums; 
-                                $res_Incrate = M('user')->where(array('userid' => $v))->setInc('releas_rate', $Lastone);
+                        $Lastone = $My_reward=$add_relinfo[$tkey]["value"]/100*$paynums;
+                        //$res_Incrate = M('user')->where(array('userid' => $v))->setInc('releas_rate', $Lastone);
+                        if($Lastone>0) {
+                            $userJifenNum=$this->getStore()->jiFenNum(['uid'=>$v]);//用户积分余额
+                            if($userJifenNum>$Lastone) {//用户积分大于释放积分
+                                $this->getStore()->decJiFen($Lastone,['uid' => $v]);//减少积分
+                                $this->getStore()->IncNum($Lastone, ['uid' => $v]);//增加用户余额
+                                $tranInfo[0] = $this->getTranMoney()->createArr($v, $Lastone, 29);//区块见点奖
+                                $tranInfo[1] = $this->getTranMoney()->createArr($v, $Lastone, 34,"2","-");//区块见点奖
+                                $this->getTranMoney()->insertAll($tranInfo);//批量添加
+                            }
+                        }
 
-                                
                     }
 
-                  
 
 
-               
-            }//if
-        }//foreach
 
-     }
-}
+
+                }//if
+            }//foreach
+
+        }
+    }
 
 
 
     //金积分转动奖  拿15层
     public function zhuand15($uid,$paynums)
     {
-            $Lasts = D('Home/index');
-            $Lastinfo = $Lasts->Getlasts($uid, 8, 'path');  
-            if (count($Lastinfo) > 0) {
-                    
-                    $Manage_b = M('config')->where(array('group' => 8, 'status' => 1))->order('id asc')->select();//金积分转动奖比例   
-              		$vips = M('config')->where(array('group' => 10, 'status' => 1))->order('id asc')->select();
-              		 $i = 0;
-        			$n = 0;
-                    foreach ($Lastinfo as $k => $v) {
-              
-                        if (!empty($v)) {//当前会员信息
+        $Lasts = D('Home/index');
+        $Lastinfo = $Lasts->Getlasts($uid, 8, 'path');
+        if (count($Lastinfo) > 0) {
 
-                                    $u_Grade = M('user')->where(array('userid' => $v))->getfield('use_grade');
-                                    $direct_fee=0;
-                                    if($u_Grade>0)$direct_fee=(float)$Manage_b[$u_Grade-1]["value"];//判断是什么比例
+            $Manage_b = M('config')->where(array('group' => 8, 'status' => 1))->order('id asc')->select();//金积分转动奖比例
+            $vips = M('config')->where(array('group' => 10, 'status' => 1))->order('id asc')->select();
+            $i = 0;
+            $n = 0;
+            foreach ($Lastinfo as $k => $v) {
 
-                                    $zhuand_reward = $direct_fee / 100 * $paynums;//我得到转动奖的加速
-                                    M('user')->where(array('userid' => $v))->setInc('releas_rate', $zhuand_reward);
-                           			//VIP奖，有集差，加速释放
-                                  $v_Grade = M('user')->where(array('userid' => $v))->getfield('vip_grade');
+                if (!empty($v)) {//当前会员信息
 
-                                  if(($v_Grade == 1 && $i == 0)||($v_Grade == 2 && $i == 0)){//VIP1奖
+                    $u_Grade = M('user')->where(array('userid' => $v))->getfield('use_grade');
+                    $direct_fee=0;
+                    if($u_Grade>0)$direct_fee=(float)$Manage_b[$u_Grade-1]["value"];//判断是什么比例
 
-                                          $u_get_money = $vips[0]['value'] / 100 * $paynums;
-                                          $res_Add = M('store')->where(array('uid' => $v))->setInc('fengmi_num', $u_get_money);
-                                          $i++;
+                    $zhuand_reward = $direct_fee / 100 * $paynums;//我得到转动奖的加速
+                    //M('user')->where(array('userid' => $v))->setInc('releas_rate', $zhuand_reward);
+                    $userJifenNum=$this->getStore()->jiFenNum(['uid'=>$v]);//用户积分余额
+                    if($userJifenNum>$zhuand_reward) {
+                        $this->getStore()->decJiFen($zhuand_reward,['uid' => $v]);//减少对应积分
+                        $this->getStore()->IncNum($zhuand_reward, ['uid' => $v]);//增加用户余额
+
+                        $tranInfo[0] = $this->getTranMoney()->createArr($v, $zhuand_reward, 33);//转动流通奖明细
+                        $tranInfo[4]=$this->getTranMoney()->createArr($v,$zhuand_reward,36,2,"-");
+                        $this->getTranMoney()->insertAll($tranInfo);//批量添加
+
+                    }
+                    //VIP奖，有集差，加速释放
+                    $v_Grade = M('user')->where(array('userid' => $v))->getfield('vip_grade');
+
+                    if(($v_Grade == 1 && $i == 0)||($v_Grade == 2 && $i == 0)){//VIP1奖
+
+                        $u_get_money = $vips[0]['value'] / 100 * $paynums;
+                        //$res_Add = M('store')->where(array('uid' => $v))->setInc('fengmi_num', $u_get_money);
+
+                        $this->getStore()->IncJiFen($u_get_money,['uid' => $v]);//增加对应积分
+                        $vip[$i] = $this->getTranMoney()->createArr($v, $u_get_money, 37,2);//vip1增加积分明细
+                        $this->getTranMoney()->insertAll($vip);//vip记录单独添加
+                        $i++;
 
 
-                                  }elseif($v_Grade==2 && $i!=0 &&$n==0){//VIP2奖
-                                       $u_get_money = $vips[1]['value'] / 100 * $paynums;
-                                       $res_Add = M('store')->where(array('userid' => $v))->setInc('releas_rate', $u_get_money);
-                                       $n++;
-
-                                  }
-
+                    }elseif($v_Grade==2 && $i!=0 &&$n==0){//VIP2奖
+                        $u_get_money = $vips[1]['value'] / 100 * $paynums;
+                        //$res_Add = M('store')->where(array('userid' => $v))->setInc('releas_rate', $u_get_money);
+                        if($userJifenNum>$u_get_money) {
+                            $this->getStore()->IncJiFen($u_get_money,['uid' => $v]);//增加对应积分
+                            $vip[$i]=$this->getTranMoney()->createArr($v,$zhuand_reward,38,2);//vip2增加积分明细
+                            $this->getTranMoney()->insertAll($vip);//vip记录单独添加
+                            $i++;
                         }
+
                     }
 
+                }
             }
+
+        }
 
 
     }
@@ -645,26 +684,26 @@ private function get_banner()
                     $res_Incrate = M('user')->where(array('userid' => $v))->setInc('releas_rate', $Lastone);
 
                     //增加银积分
-                        $u_get_money = $add_relinfo[3]['value'] / 100 * $paynums;
-                        if($u_Grade == 3 && $i == 0){
-                            $res_Add = M('store')->where(array('uid' => $v))->setInc('fengmi_num', $u_get_money);//给上级会员加银积分
-                            if ($res_Add) {
-                                $earns['pay_id'] = $uid;
-                                $earns['get_id'] = $v;
-                                $earns['get_nums'] = $u_get_money;
-                                $earns['get_level'] = $k;
-                                $earns['get_types'] = $type;
-                                $earns['get_time'] = time();
-                                $res_Earn = M('moneyils')->add($earns);
+                    $u_get_money = $add_relinfo[3]['value'] / 100 * $paynums;
+                    if($u_Grade == 3 && $i == 0){
+                        $res_Add = M('store')->where(array('uid' => $v))->setInc('fengmi_num', $u_get_money);//给上级会员加银积分
+                        if ($res_Add) {
+                            $earns['pay_id'] = $uid;
+                            $earns['get_id'] = $v;
+                            $earns['get_nums'] = $u_get_money;
+                            $earns['get_level'] = $k;
+                            $earns['get_types'] = $type;
+                            $earns['get_time'] = time();
+                            $res_Earn = M('moneyils')->add($earns);
 
-                                // $jifendets['pay_id'] = $uid;
-                                // $jifendets['get_id'] = $v;
-                                // $jifendets['get_nums'] = $u_get_money;
-                                // $jifendets['get_time'] = time();
-                                // $jifendets['get_type'] = 1;
-                                // M('tranmoney')->add($jifendets);
-                                $i++;
-                            }
+                            // $jifendets['pay_id'] = $uid;
+                            // $jifendets['get_id'] = $v;
+                            // $jifendets['get_nums'] = $u_get_money;
+                            // $jifendets['get_time'] = time();
+                            // $jifendets['get_type'] = 1;
+                            // M('tranmoney')->add($jifendets);
+                            $i++;
+                        }
                     }
                 }
             }//if
@@ -706,7 +745,7 @@ private function get_banner()
         $this->display();
     }
 
-   
+
 
 
 //兑换银积分
@@ -718,7 +757,7 @@ private function get_banner()
             $dhnums = I('dhnums');
             $pwd = I('pwd');
             //if ($dhnums < 100) {
-              //  $this->ajaxReturn('最少兑换数量为100哦~', 0);
+            //  $this->ajaxReturn('最少兑换数量为100哦~', 0);
             //}
             if ($dhnums % 1 != 0) {
                 $this->ajaxReturn('兑换数量必须为1的倍数哦~', 0);
@@ -737,13 +776,13 @@ private function get_banner()
             //查找当前账户金积分
             $is_yue = M('store')->where(array('uid' => $uid))->getField('cangku_num');
             //执行兑换
-           //执行兑换
+            //执行兑换
             if ($res_get) {
                 $datac['pay_id'] = $uid;
                 $datac['get_id'] = $uid;
                 $datac['now_nums'] = $is_yue;
                 $datac['now_nums_get'] = $is_yue;
-                $datac['is_release'] = 1;                
+                $datac['is_release'] = 1;
                 $datac['get_nums'] = $dhnums;
                 $datac['get_time'] = time();
                 $datac['get_type'] = 13;
@@ -753,7 +792,7 @@ private function get_banner()
                 $data['get_id'] = $uid;
                 $data['now_nums'] = $pay_n;
                 $data['now_nums_get'] = $pay_n;
-                $data['is_release'] = 1;                
+                $data['is_release'] = 1;
                 $data['get_nums'] = $canget;
                 $data['get_time'] = time();
                 $data['get_type'] = 1;
@@ -764,12 +803,12 @@ private function get_banner()
             $add_Dets = M('tranmoney')->add($data);
 
             if ($add_Dets) {
-               
-               
-                   $this->Manage_reward($uid,$dhnums); //产生管理奖和分享奖
-                   $this->Addreas15($uid,$dhnums);//产生区块奖和VIP奖
-             
-            
+
+
+                $this->Manage_reward($uid,$dhnums); //产生管理奖和分享奖
+                $this->Addreas15($uid,$dhnums);//产生区块奖和VIP奖
+
+
                 //判断用户等级
                 $uChanlev = D('Home/index');
                 $uChanlev->Checklevel($uid);
@@ -779,13 +818,13 @@ private function get_banner()
         $this->assign('minems', $minems);
         $this->display();
     }
-  
+
     //银积分记录
     public function Exchangerecords()
     {
         $uid = session('userid');
         $where['get_id|pay_id'] = $uid;
-        $where['get_type'] = array('in', '1,23,24,25,26');
+        $where['get_type'] = array('in', '1,23,24,25,26,34,35,36,37,38');
         // $where['get_type'] = 1;
         $traInfo = M('tranmoney');
         //分页
@@ -809,6 +848,7 @@ private function get_banner()
                 ajaxReturn('暂无记录', 0);
             }
         }
+
         $this->assign('uid', $uid);
         $this->assign('Chan_info', $Chan_info);
         $this->assign('page', $page);
@@ -1071,7 +1111,7 @@ private function get_banner()
 
         $arr = array(1 => '微信支付', 2 => '支付宝支付', 3 => '果子支付');
         $res = $order->where($where)->setField('order_paytype', $arr[$order_paytype]);
-        $wxurl = 'http://yxgsgy.com/wxPay/example/jsapi.php?order_no=' . $order_no;
+        $wxurl = "//".$_SERVER['HTTP_HOST'].'/wxPay/example/jsapi.php?order_no=' . $order_no;
         $arr_url = array(1 => $wxurl, 2 => '', 3 => U('Ajaxdz/kaiken'));
         if ($res === false) {
             ajaxReturn('下单失败');

@@ -9,7 +9,18 @@ use Common\Model\ModelModel;
  */
 class StoreModel extends ModelModel
 {
-    
+    /*
+     * 减少积分
+     * */
+    public function decJiFen($num,$where){
+        return $this->where($where)->setDec('fengmi_num',$num);
+    }
+    /*
+     * 增加积分
+     * */
+    public function IncJiFen($num,$where){
+        return $this->where($where)->setInc('fengmi_num',$num);
+    }
 
     public function CangkuNum($where){
         if(empty($where)){
@@ -28,9 +39,9 @@ class StoreModel extends ModelModel
 
     //扣减仓库数量
     public function DesNum($num){
-    	if(empty($num)){
+        if(empty($num)){
             $this->error="参数错误";
-    		return false;
+            return false;
         }
         $userid=session('userid');
         $where['uid']=$userid;
@@ -39,13 +50,13 @@ class StoreModel extends ModelModel
             $this->error="仓库果子不足";
             return false;
         }
-    	$res= $this->where($where)->setDec('cangku_num',$num);
-    	if($res)
+        $res= $this->where($where)->setDec('cangku_num',$num);
+        if($res)
         {
             return true;
         }else{
             $this->error="操作失败";
-            return false; 
+            return false;
         }
     }
 
@@ -54,7 +65,7 @@ class StoreModel extends ModelModel
         if(empty($num))
             return false;
 
-       if($where==null){
+        if($where==null){
             $userid=get_userid();
             $where['uid']=$userid;
         }
@@ -67,39 +78,39 @@ class StoreModel extends ModelModel
         if(empty($num))
             return false;
 
-       if($where==null){
+        if($where==null){
             $userid=get_userid();
             $where['uid']=$userid;
         }
         $res= $this->where($where)->setInc('huafei_num',$num);
         if($res)
-            return $this->where($where)->getField('huafei_num'); 
+            return $this->where($where)->getField('huafei_num');
         else
             return false;
     }
 
     //创建仓库
     public function CreateCangku($num,$uid){
-    	if(empty($uid))
-    		return false;
-    	$data['cangku_num']=$num;
+        if(empty($uid))
+            return false;
+        $data['cangku_num']=$num;
         $data['uid']=$uid;
-    	$res=$this->add($data);
-    	if($res===false)
-    		return false;
-    	//创建15块地
-    	for ($i=1; $i <= 15; $i++) {
-    		$seed=0;
-    		$status=0;
+        $res=$this->add($data);
+        if($res===false)
+            return false;
+        //创建15块地
+        for ($i=1; $i <= 15; $i++) {
+            $seed=0;
+            $status=0;
             if ($i<=5) {
-                $farm_type=1;  
+                $farm_type=1;
             }else if(5<$i && $i<=10) {
-                $farm_type=2;  
+                $farm_type=2;
             }else{
-                $farm_type=3;  
+                $farm_type=3;
             }
             $datalist[]=array('uid'=>$uid,'f_id'=>$i,'farm_type'=>$farm_type,'status'=>$status,'seeds'=>$seed);
-    	}
+        }
         D('nzusfarm')->addAll($datalist);
 
         //添加等级表
@@ -107,8 +118,8 @@ class StoreModel extends ModelModel
 
         //添加施肥表
         M('user_huafei')->add(array('uid'=>$uid));
-        
-    	return true;
+
+        return true;
     }
 
 

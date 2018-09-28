@@ -8,7 +8,7 @@
 namespace Common\Model;
 
 class BaseModel extends \Think\Model{
-    private $tableName;
+    protected $tableName;
     /**
      * @return mixed
      */
@@ -32,6 +32,13 @@ class BaseModel extends \Think\Model{
     {
         $id = M($this->tableName)->insertGetId($data);
         return $id ? $id : "";
+    }
+
+    /*
+  * 批量添加
+  * */
+    public function insertAll($data){
+        return M($this->tableName)->addAll($data);
     }
 
     /*

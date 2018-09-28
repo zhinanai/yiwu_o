@@ -20,9 +20,9 @@
 
 <style type="text/css">
     .yugejil1{ width: 100%; height: 40px; background: #ddd; line-height: 40px;}
-.yugejil1 p{ float: left; width: 24.3%;font-size: 14px; text-align: center; color: #000;}
-.p23{line-height: 40px;}
-#wrapper li p{ float: left; width: 24.3%;font-size: 14px; text-align: center; color: #000;}
+    .yugejil1 p{ float: left; width: 24.3%;font-size: 14px; text-align: center; color: #000;}
+    .p23{line-height: 40px;}
+    #wrapper li p{ float: left; width: 24.3%;font-size: 14px; text-align: center; color: #000;}
 
 </style>
 
@@ -40,9 +40,9 @@
                 <foreach name="Chan_info" item="v">
 
 
-                <if condition= "$v['get_type'] eq 1">
-                    <li>
-                        <?php 
+                    <if condition= "$v['get_type'] eq 1">
+                        <li>
+                            <?php
                         if($v['get_id']==$v['pay_id']){    
 
                             if($v['get_nums']>0){
@@ -51,9 +51,9 @@
                             echo "<p>积分释放</p><p>".$v['get_nums']."</p>";
 
                             }
-                        
 
-                        }else{
+
+                            }else{
                             if($v['get_id']==$uid){
 
                             echo "<p>转入获得</p><p>+".$v['get_nums']."</p>";
@@ -62,33 +62,33 @@
                             $zhc=$v['get_nums']*4;
                             echo "<p>转出获得</p><p>+".$zhc."</p>";
                             }
-                        }?>
-                          <p class="p23">
-                            <if condition="$v['is_release'] eq 0 && $v['now_nums'] eq 0 && $v['now_nums_get'] eq 0">
+                            }?>
+                            <p class="p23">
+                                <if condition="$v['is_release'] eq 0 && $v['now_nums'] eq 0 && $v['now_nums_get'] eq 0">
 
-                            暂无记录
-                            <else/>
-                            <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
-                            </if>
+                                    暂无记录
+                                    <else/>
+                                    <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+                                </if>
 
-                        </p>
-                        <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
-                    </li>
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
                     </if>
 
 
 
- <if condition= "$v['get_type'] eq 23">
-                    <li>
-                        <p>推荐赠送</p>
-                        <p>+{$v['get_nums']}</p>
+                    <if condition= "$v['get_type'] eq 23">
+                        <li>
+                            <p>推荐赠送</p>
+                            <p>+{$v['get_nums']}</p>
 
-                          <p class="p23">
-                          <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
 
-                        </p>
-                        <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
-                    </li>
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
                     </if>
 
                     <if condition= "$v['get_type'] eq 24">
@@ -127,25 +127,84 @@
                             <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
                         </li>
                     </if>
+                    <if condition= "$v['get_type'] eq 34">
+                        <li>
+                            <p>见点奖释放</p>
+                            <p>-{$v['get_nums']}</p>
+
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
+                    </if>
+                    <if condition= "$v['get_type'] eq 35">
+                        <li>
+                            <p>推荐奖释放</p>
+                            <p>-{$v['get_nums']}</p>
+
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
+                    </if>
+                    <if condition= "$v['get_type'] eq 36">
+                        <li>
+                            <p>流通奖释放</p>
+                            <p>-{$v['get_nums']}</p>
+
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
+                    </if>
+                    <if condition= "$v['get_type'] eq 37">
+                        <li>
+                            <p>vip积分奖励</p>
+                            <p>+{$v['get_nums']}</p>
+
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
+                    </if>
+                    <if condition= "$v['get_type'] eq 38">
+                        <li>
+                            <p>vip平级奖积分奖励</p>
+                            <p>+{$v['get_nums']}</p>
+
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
+                    </if>
 
 
 
 
 
 
-                       <!-- <if condition= "$v['get_type'] eq 23">
-                    <li>
-                      <p>推荐赠送</p>
-                     <gt name="v['get_nums']" value="0">
-                      <p>+{$v['get_nums']}</p>
-                     <else/>
-                       <p>{$v['get_nums']}</p>
-                     </gt>
+                    <!-- <if condition= "$v['get_type'] eq 23">
+                 <li>
+                   <p>推荐赠送</p>
+                  <gt name="v['get_nums']" value="0">
+                   <p>+{$v['get_nums']}</p>
+                  <else/>
+                    <p>{$v['get_nums']}</p>
+                  </gt>
 
- <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
-                      <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
-                    </li>
-                 </if> -->
+<eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+                   <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                 </li>
+              </if> -->
 
 
                     <!--    <if condition= "$v['get_type'] eq 12">
