@@ -551,7 +551,7 @@ class IndexController extends CommonController
     public function zhuand15($uid,$paynums)
     {
         $Lasts = D('Home/index');
-        $Lastinfo = $Lasts->Getlasts($uid, 8, 'path');
+        $Lastinfo = $Lasts->Getlasts($uid, 15, 'path');
         if (count($Lastinfo) > 0) {
 
             $Manage_b = M('config')->where(array('group' => 8, 'status' => 1))->order('id asc')->select();//金积分转动奖比例
