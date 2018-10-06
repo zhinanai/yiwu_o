@@ -101,18 +101,33 @@ class GrowthController extends CommonController {
     M('trans_quxiao')->add($mydeal);//把记录复制到另一个表
 
 
-    if($type==0){//卖出单，自己是购买方，只清空payin_id和改变pay_state为0
+    if($type==0){//卖出单，自己是购买方(卖家发布)，只清空payin_id和改变pay_state为0
 
             $payout['payin_id'] =0;
             $payout['pay_state'] =0;
             $res1 = M('trans')->where(array('id'=>$id))->save($payout); 
 
 
-    }elseif($type==1){//为购买单，删除订单
-
-        $res1 = M('trans')->delete($id); 
+    }elseif($type==1){//为购买单(买家发布)，退回卖家余额跟保证金并删除订单
 
 
+        $sellnums = $mydeal["pay_nums"] + 100;
+
+        $doDec = M('store')->where(array('uid'=>$mydeal['payout_id']))->setInc('cangku_num',$sellnums);
+
+        //增加自己的余额记录
+
+        $pay_n = M('store')->where(array('uid' => $mydeal['payout_id']))->getfield('cangku_num');
+        $jifen_dochange['now_nums'] = $pay_n;
+        $jifen_dochange['now_nums_get'] = $pay_n;
+        $jifen_dochange['is_release'] = 1;
+        $jifen_dochange['pay_id'] = 0;
+        $jifen_dochange['get_id'] = $mydeal['payout_id'];
+        $jifen_dochange['get_nums'] = $sellnums;
+        $jifen_dochange['get_time'] = time();
+         $jifen_dochange['get_type'] = 10;
+        M('tranmoney')->add($jifen_dochange);
+        $res1 = M('trans')->delete($id);
     }
 
         if($res1){       
