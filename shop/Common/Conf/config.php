@@ -2,10 +2,10 @@
 return array(
 	//数据库配置
 	'DB_TYPE'   => 'mysql', // 数据库类型
-    'DB_HOST'   => 'rm-bp10115170585gr28o.mysql.rds.aliyuncs.com', // 服务器地址
+    'DB_HOST'   => 'rm-j6c351ai5sh7jf4jx0o.mysql.rds.aliyuncs.com', // 服务器地址
     'DB_NAME'   => 'yiwu_o', // 数据库名
-    'DB_USER'   => 'ypay', // 用户名
-    'DB_PWD'    => 'wmd-2018', // 密码
+    'DB_USER'   => 'yiwu', // 用户名
+    'DB_PWD'    => 'yiwu-2018', // 密码
     'DB_PORT'   => '3306', // 端口
     'DB_PREFIX' => 'ysk_', // 数据库表前缀
 
