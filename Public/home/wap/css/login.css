@@ -24,7 +24,7 @@
 .yuyan select{font-size: .32rem;background: none;border: none;color: white;outline: none;} 
 .yuyan option{color: #48b1a4;}
 .logo{ width:100%; text-align: center;position: relative;top: -0.95rem}
-.logo img{ width: 1.9rem;}
+.logo img{ width: 1.9rem;border-radius: 50%;}
 .formbox{ width: 80%;  margin: 0 auto; margin-top: 1rem; text-align: center;}
 .formlogin{margin: 0 auto;color: #fff;font-size: .28rem;position: relative;}
 .input_box{width: 100%;margin-top: .5rem;}
