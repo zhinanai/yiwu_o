@@ -40,9 +40,9 @@ class CommonController extends Controller
         $H = date("H", time());
         if ($H >= 1 && $H < 8 && $u_info['check_app'] == 0) {
             success_alert("凌晨1点到8点站点维护", U('Login/logout'));
-        }/*else if($u_info['check_app'] == 0){
+        }else if($u_info['check_app'] == 0){
             success_alert("站点功能升级请稍后登陆~", U('Login/logout'));
-        }*/
+        }
         //判断12小时后必须重新登录
         $in_time = session('in_time');
         $time_now = time();
