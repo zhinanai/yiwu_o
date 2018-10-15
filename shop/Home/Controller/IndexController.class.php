@@ -237,7 +237,7 @@ class IndexController extends CommonController
         $traInfo = M('tranmoney');
         $uid = session('userid');
         $where['pay_id|get_id'] = $uid;
-        $where['get_type'] = array('not in', '1,11,12,22,23,25,26,34,35,36,37,38');
+        $where['get_type'] = array('not in', '1,11,12,22,23,25,26,34,35,36,37,38,42,43');
         //分页
         $p = getpage($traInfo, $where, 50);
         $page = $p->show();
@@ -824,7 +824,7 @@ class IndexController extends CommonController
     {
         $uid = session('userid');
         $where['get_id|pay_id'] = $uid;
-        $where['get_type'] = array('in', '1,23,24,25,26,34,35,36,37,38');
+        $where['get_type'] = array('in', '1,23,24,25,26,34,35,36,37,38,42,43');
         // $where['get_type'] = 1;
         $traInfo = M('tranmoney');
         //分页

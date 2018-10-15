@@ -176,7 +176,7 @@
                     </if>
                     <if condition= "$v['get_type'] eq 38">
                         <li>
-                            <p>vip平级奖积分奖励</p>
+                            <p>vip平级奖</p>
                             <p>+{$v['get_nums']}</p>
 
                             <p class="p23">
@@ -186,6 +186,31 @@
                             <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
                         </li>
                     </if>
+                    <if condition= "$v['get_type'] eq 42">
+                        <li>
+                            <p>卖出商品奖</p>
+                            <p>+{$v['get_nums']}</p>
+
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
+                    </if>
+                    <if condition= "$v['get_type'] eq 43">
+                        <li>
+                            <p>买入商品奖</p>
+                            <p>+{$v['get_nums']}</p>
+
+                            <p class="p23">
+                                <eq name="v['trtype']" value="1">{$v['now_nums']}<else/>{$v['now_nums_get']}</eq>
+
+                            </p>
+                            <p class="p24">{$v['get_timeymd']}</br>{$v['get_timedate']}</p>
+                        </li>
+                    </if>
+
 
 
 

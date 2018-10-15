@@ -107,6 +107,15 @@
                                     <elseif condition="$v['get_type'] eq 33"/>
                                     <p>流通奖</p>
                                     <p>+{$v['get_nums']}</p>
+                                    <elseif condition="$v['get_type'] eq 39"/>
+                                    <p>商城支出</p>
+                                    <p>-{$v['get_nums']}</p>
+                                    <elseif condition="$v['get_type'] eq 40"/>
+                                    <p>商城退回</p>
+                                    <p>+{$v['get_nums']}</p>
+                                    <elseif condition="$v['get_type'] eq 41"/>
+                                    <p>商品卖出</p>
+                                    <p>+{$v['get_nums']}</p>
                                 </if>
                             </eq>
                             <p class="p23">
