@@ -377,6 +377,12 @@ class UserController extends CommonController
         $this->display();
     }
 
+    public function my_shop(){
+         $code=$this->encrypt(session("userid"),"E","YIWU");
+         $url="http://shop.gzly88.cn/index.php/Mobile/user/login.html?code=".urlencode($code);
+         header("Location: ".$url);
+    }
+
     //关于我们
     public function Aboutus()
     {
