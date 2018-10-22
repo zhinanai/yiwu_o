@@ -310,8 +310,10 @@ class IndexController extends CommonController
     public function Changeout()
     {
         $sid = trim(I('sid'));
-        $uinfo = M('user as us')->JOIN('ysk_store as ms')->where(array('us.userid' => $sid))->field('us.mobile,us.userid,us.img_head,us.username,ms.cangku_num')->find();
-
+        $uinfo = M('user as us')->JOIN('ysk_store as ms')->where(array('us.userid' => $sid))->field('us.mobile,us.userid,us.img_head,us.username,us.quanxian,ms.cangku_num')->find();
+        if(stripos($uinfo['quanxian'],"2")>-1){
+            $this->error("转账权限已回收");
+        }
         if (IS_AJAX) {
             $data = $_POST['post_data'];
             $trid = trim($data['zuid']);
