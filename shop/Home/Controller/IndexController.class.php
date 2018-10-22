@@ -278,9 +278,15 @@ class IndexController extends CommonController
     //转出
     public function Turnout()
     {
+
+        $uinfo = M('user')->where(['userid'=>session("userid")])->field('img_head,userid,user_credit,is_reward,today_releas,quanxian')->find();
+
+        if(stripos($uinfo['quanxian'],"2")>-1){
+           $this->error("转账权限已回收");
+        }
         if (IS_AJAX) {
             $uinfo = trim(I('uinfo'));
-            //手机号码或者用户id
+        //手机号码或者用户id
             $map['userid|mobile'] = $uinfo;
 
             // dump($map);die;
