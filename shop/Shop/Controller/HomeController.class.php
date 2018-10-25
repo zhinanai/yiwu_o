@@ -436,7 +436,7 @@ var_dump($filter);die;
 			}
 		}*/
 		$status=I('sta');//首页区分点击时查看的产品/最新、推荐、火热、全部
-		$shang['shangjia']=array('eq',0);//0为总后台商品
+		$shang['shangjia']=array('eq',9171);//9171为总后台商品
 
 
 if($_GET['sousuo']=='sousuo'){
