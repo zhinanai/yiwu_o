@@ -13,6 +13,7 @@ class CarController extends CommonController
 
 	public function shopping()
 	{
+	    $this->error("购物车关闭");
 		$carList = session("car");
 		/*dump($carList);die;*/
 		$this->assign("carList", $carList);
