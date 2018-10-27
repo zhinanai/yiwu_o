@@ -357,7 +357,8 @@ public function cation()
         $this->assign("today_product_list",$today_product_list);
 
         //总后台商品还是个人店铺商品，0为总后台
-        $shang['shangjia']=array('eq',0);
+        //$shang['shangjia']=array('eq',0);
+        $shang="";
 	    //火爆产品
 	    $hot_product_list = M("product_detail")->where(array("is_hot"=>1))->where($shang)->limit(6)->order("ctime desc")->select();
 	    $this->assign("hot_product_list",$hot_product_list);
