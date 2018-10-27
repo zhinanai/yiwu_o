@@ -142,7 +142,9 @@
         href="{:U('Member/verify')}"> <em class="user-info-icon"></em>
     <dl>
         <dt>认证中心</dt>
+        <if condition="$uinfo['is_dailishang']==0">
         <dd style='color: red;'>前往认证</dd>
+        </if>
     </dl>
 </a>
     <eq name="member['status']" value="1"><a href="{:U('Shop/Home/Business')}"> <em class="product-upload-icon"></em>
